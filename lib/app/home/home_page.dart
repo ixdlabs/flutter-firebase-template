@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_firebase_template/logger/logger.dart';
 import 'package:flutter_firebase_template/providers/counter_provider.dart';
 import 'package:flutter_firebase_template/widgets/default_scaffold.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

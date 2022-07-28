@@ -10,6 +10,17 @@ fvm use
 fvm flutter run
 ```
 
+## Configuration
+
+### Android
+
+1. Enable firebase firestore.
+2. Change application id in `android/app/build.gradle` to your application id. (Default `com.example.flutter_firebase_template`)
+3. In iOS, change the bundle id to your application id. (Default `com.example.flutterFirebaseTemplate`)
+4. Remove firebase files from `.gitignore`.
+5. Install `flutterfire`. (https://firebase.flutter.dev/docs/overview/#using-the-flutterfire-cli)
+6. Use `flutterfire configure` to configure the project. (Run this again if you change the application id/add new services)
+
 ## Design Choices
 
 ### State Management
@@ -24,7 +35,7 @@ This project uses [Auto Route](https://pub.dev/packages/auto_route) to handle ro
 The relevant code is in `lib/router` directory.
 Since this routing package is using code generation, you will have to run `build_runner` everytime routing code is changed.
 
-```bash
+```shell
 fvm flutter pub run build_runner build --delete-conflicting-outputs
 ```
 

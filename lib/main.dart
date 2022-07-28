@@ -1,5 +1,7 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase_template/firebase_options.dart';
 import 'package:flutter_firebase_template/logger/logger.dart';
 import 'package:flutter_firebase_template/logger/observers.dart';
 import 'package:flutter_firebase_template/router/router.gr.dart';
@@ -12,7 +14,11 @@ void main() async {
   if (kReleaseMode) Logger.level = Level.warning;
   await Log.initialize();
 
+  // Initialize firebase.
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  Log.i("Firebase initialized.");
+
   runApp(MainApp());
 }
 
