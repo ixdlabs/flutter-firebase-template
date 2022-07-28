@@ -1,26 +1,15 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase_template/logger.dart';
 import 'package:flutter_firebase_template/router/router.gr.dart';
 import 'package:flutter_firebase_template/theme.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logging/logging.dart';
 
 void main() {
-  if (kReleaseMode) {
-    // Don't log anything below warnings in production.
-    Logger.root.level = Level.WARNING;
-  }
-  Logger.root.onRecord.listen((record) async {
-    debugPrint("${record.level.name}: ${record.time}: "
-        "${record.loggerName}: "
-        "${record.message}");
-    if (record.error != null) {
-      debugPrint("${record.error}");
-      debugPrint("${record.stackTrace}");
-    }
-    if (record.level == Level.SEVERE) {
-      // TODO: Capture exception
-    }
-  });
+  // Don't log anything below warnings in production.
+  if (kReleaseMode) Logger.root.level = Level.WARNING;
+  Logger.root.onRecord.listen(MainAppLogger.instance.onLogRecord);
 
   WidgetsFlutterBinding.ensureInitialized();
   runApp(MainApp());
@@ -34,10 +23,13 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      routerDelegate: _appRouter.delegate(),
-      routeInformationParser: _appRouter.defaultRouteParser(),
-      theme: _appTheme.build(),
+    return ProviderScope(
+      observers: [MainAppLogger.instance.providerObserver],
+      child: MaterialApp.router(
+        routerDelegate: _appRouter.delegate(),
+        routeInformationParser: _appRouter.defaultRouteParser(),
+        theme: _appTheme.build(),
+      ),
     );
   }
 }

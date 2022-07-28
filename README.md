@@ -10,9 +10,20 @@ fvm use
 fvm flutter run
 ```
 
-## Generating Code using build_runner
+## Design Choices
 
-If you pull the project from GitHub, oryou need to run the following command,
+### State Management
+
+The project uses [Riverpod](https://riverpod.dev/) to manage the state of the application.
+The relevant provider code is in `lib/providers` directory.
+Additionally, [Flutter Hooks] (https://pub.dev/packages/flutter_hooks) are used for manage life cycle of the widgets.
+
+### Routing
+
+This project uses `auto_route` to handle routing.
+The relevant code is in `lib/router` directory.
+Since this routing package is using code generation, you will have to run `build_runner` everytime routing changes.
+Documentation for this package is [here](https://pub.dev/packages/auto_route).
 
 ```bash
 fvm flutter pub run build_runner build --delete-conflicting-outputs
