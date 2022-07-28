@@ -12,12 +12,21 @@ fvm flutter run
 
 ## Configuration
 
-1. Enable authentication/firebase firestore.
+### Enables Services
+
+1. Authentication https://firebase.flutter.dev/docs/auth/start
+2. Firestore https://firebase.flutter.dev/docs/firestore/usage
+3. Crashlytics https://firebase.flutter.dev/docs/crashlytics/usage
+
+### Flutter setup
+
+1. Enable firebase services.
 2. Change application id in `android/app/build.gradle` to your application id. (Default `com.example.flutter_firebase_template`)
 3. In iOS, change the bundle id to your application id. (Default `com.example.flutterFirebaseTemplate`)
 4. Remove firebase files from `.gitignore`.
 5. Install [`flutterfire`](https://firebase.flutter.dev/docs/overview/#using-the-flutterfire-cli).
 6. Use `flutterfire configure` to configure the project. (Run this again if you change the application id/add new services)
+7. Crash app using top right button and use dashboard to make sure crashlytics integration works.
 
 > TODO: Guide on using emulator.
 

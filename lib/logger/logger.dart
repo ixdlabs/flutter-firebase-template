@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:logger/logger.dart';
 
@@ -26,8 +27,11 @@ class Log {
     _logger.w(message, error, stackTrace);
   }
 
-  static void e(dynamic message, [dynamic error, StackTrace? stackTrace]) {
+  static void e(dynamic message,
+      [dynamic error, StackTrace? stackTrace]) async {
     _logger.e(message, error, stackTrace);
+    await FirebaseCrashlytics.instance
+        .recordError(error, stackTrace, reason: message);
   }
 
   static void wtf(dynamic message, [dynamic error, StackTrace? stackTrace]) {
