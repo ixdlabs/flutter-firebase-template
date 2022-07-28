@@ -12,7 +12,7 @@ fvm flutter run
 
 ## Configuration
 
-### Enables Services
+### Enabled Services
 
 1. Authentication https://firebase.flutter.dev/docs/auth/start
 2. Firestore https://firebase.flutter.dev/docs/firestore/usage
