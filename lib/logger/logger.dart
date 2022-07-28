@@ -44,7 +44,7 @@ class _MainAppLogPrinter extends LogPrinter {
 
   @override
   List<String> log(LogEvent event) {
-    if (!kReleaseMode) devPrinter.log(event);
+    if (!kReleaseMode) return devPrinter.log(event);
     return ["${event.level.name} [${DateTime.now()}]: ${event.message}"];
   }
 }
