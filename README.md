@@ -1,16 +1,19 @@
-# flutter_firebase_template
+# Flutter Project
 
-A new Flutter project.
+## Running Project
 
-## Getting Started
+It is recommended to use `fvm` to run the project. You can install `fvm` by following the instructions [here](https://fvm.app/).
+If you have `fvm` installed, you can run the following command,
 
-This project is a starting point for a Flutter application.
+```shell
+fvm use
+fvm flutter run
+```
 
-A few resources to get you started if this is your first Flutter project:
+## Generating Code using build_runner
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+If you pull the project from GitHub, oryou need to run the following command,
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```bash
+fvm flutter pub run build_runner build --delete-conflicting-outputs
+```
