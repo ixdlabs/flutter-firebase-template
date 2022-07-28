@@ -26,7 +26,10 @@ class MainApp extends StatelessWidget {
     return ProviderScope(
       observers: [MainAppLogger.instance.providerObserver],
       child: MaterialApp.router(
-        routerDelegate: _appRouter.delegate(),
+        debugShowCheckedModeBanner: false,
+        routerDelegate: _appRouter.delegate(
+          navigatorObservers: () => [MainAppLogger.instance.navigatorObserver],
+        ),
         routeInformationParser: _appRouter.defaultRouteParser(),
         theme: _appTheme.build(),
       ),

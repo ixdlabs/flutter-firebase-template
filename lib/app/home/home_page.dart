@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_template/providers/counter_provider.dart';
+import 'package:flutter_firebase_template/widgets/default_scaffold.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class HomePage extends ConsumerWidget {
@@ -9,7 +10,7 @@ class HomePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final counter = ref.watch(counterProvider);
 
-    return Scaffold(
+    return DefaultScaffold(
       appBar: AppBar(title: const Text("Home Page")),
       body: Center(child: Text("Counter: $counter")),
       floatingActionButton: FloatingActionButton(

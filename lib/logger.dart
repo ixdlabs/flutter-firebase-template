@@ -1,14 +1,13 @@
-import 'package:flutter/foundation.dart';
+import 'package:auto_route/auto_route.dart';
+import 'package:flutter/widgets.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logging/logging.dart';
 
 class MainAppLogger {
-  final ProviderObserver providerObserver = _MainAppProviderObserver();
   static final MainAppLogger _instance = MainAppLogger._();
+  static MainAppLogger get instance => _instance;
 
   MainAppLogger._();
-
-  static MainAppLogger get instance => _instance;
 
   Future<void> onLogRecord(LogRecord record) async {
     debugPrint("${record.level.name}: ${record.time}: "
@@ -21,6 +20,9 @@ class MainAppLogger {
       // TODO: Capture exception
     }
   }
+
+  ProviderObserver get providerObserver => _MainAppProviderObserver();
+  AutoRouterObserver get navigatorObserver => _MainAppNavigationObserver();
 }
 
 class _MainAppProviderObserver extends ProviderObserver {
@@ -40,5 +42,14 @@ class _MainAppProviderObserver extends ProviderObserver {
   void providerDidFail(ProviderBase provider, Object error,
       StackTrace stackTrace, ProviderContainer container) {
     _logger.warning("Error from ${getName(provider)}: $error");
+  }
+}
+
+class _MainAppNavigationObserver extends AutoRouterObserver {
+  final _logger = Logger('navigation_observer');
+
+  @override
+  void didPush(Route route, Route? previousRoute) {
+    _logger.info("Pushed ${route.settings.name}");
   }
 }

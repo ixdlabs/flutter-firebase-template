@@ -20,11 +20,19 @@ Additionally, [Flutter Hooks] (https://pub.dev/packages/flutter_hooks) are used 
 
 ### Routing
 
-This project uses `auto_route` to handle routing.
+This project uses [Auto Route](https://pub.dev/packages/auto_route) to handle routing.
 The relevant code is in `lib/router` directory.
-Since this routing package is using code generation, you will have to run `build_runner` everytime routing changes.
-Documentation for this package is [here](https://pub.dev/packages/auto_route).
+Since this routing package is using code generation, you will have to run `build_runner` everytime routing code is changed.
 
 ```bash
 fvm flutter pub run build_runner build --delete-conflicting-outputs
 ```
+
+### Common Widgets
+
+All common widgets live inside `lib/widgets` directory.
+
+### Pages
+
+All pages live inside `lib/pages` directory.
+Each page should be inside directories that represent their feature/use-case.
