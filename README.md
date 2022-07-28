@@ -36,3 +36,10 @@ All common widgets live inside `lib/widgets` directory.
 
 All pages live inside `lib/pages` directory.
 Each page should be inside directories that represent their feature/use-case.
+
+### Logging
+
+The project uses [Logger](https://pub.dev/packages/logger) to log the events.
+Logging can be done simply as `Log.d("message")` (for debug) or `Log.i("message")` (for info) or `Log.w("message")` (for warning) or `Log.e("message")` (for error). You may also pass an `Exception` and a `StackTrace` to log the error as `Log.e("message", e, stackTrace)`.
+
+Note: If the logs are crowded with `ViewPostIme` logs, apply following filter (VS Code): `!ViewPostIme`

@@ -31,7 +31,7 @@ dependencies:
     sdk: flutter
 
   # Core
-  logging: ^1.0.2
+  logger: ^1.1.0
   auto_route: ^4.2.1
   flutter_hooks: ^0.18.5+1
   hooks_riverpod: ^2.0.0-dev.9
