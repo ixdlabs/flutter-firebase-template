@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase_template/theme.dart';
 import 'package:logging/logging.dart';
 
 void main() {
@@ -29,6 +30,8 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return MaterialApp(
+      theme: MainAppTheme().build(),
+    );
   }
 }
