@@ -16,7 +16,7 @@ fvm flutter run
 2. Change application id in `android/app/build.gradle` to your application id. (Default `com.example.flutter_firebase_template`)
 3. In iOS, change the bundle id to your application id. (Default `com.example.flutterFirebaseTemplate`)
 4. Remove firebase files from `.gitignore`.
-5. Install `flutterfire`. (https://firebase.flutter.dev/docs/overview/#using-the-flutterfire-cli)
+5. Install [`flutterfire`](https://firebase.flutter.dev/docs/overview/#using-the-flutterfire-cli).
 6. Use `flutterfire configure` to configure the project. (Run this again if you change the application id/add new services)
 
 > TODO: Guide on using emulator.
@@ -27,7 +27,7 @@ fvm flutter run
 
 The project uses [Riverpod](https://riverpod.dev/) to manage the state of the application.
 The relevant provider code is in `lib/providers` directory.
-Additionally, [Flutter Hooks] (https://pub.dev/packages/flutter_hooks) are used for manage life cycle of the widgets.
+Additionally, [Flutter Hooks](https://pub.dev/packages/flutter_hooks) are used for manage life cycle of the widgets.
 
 ### Routing
 

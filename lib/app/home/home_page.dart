@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_template/providers/counter_provider.dart';
 import 'package:flutter_firebase_template/widgets/default_scaffold.dart';
@@ -11,7 +12,15 @@ class HomePage extends ConsumerWidget {
     final counter = ref.watch(counterProvider);
 
     return DefaultScaffold(
-      appBar: AppBar(title: const Text("Home Page")),
+      appBar: AppBar(
+        title: const Text("Home Page"),
+        actions: [
+          IconButton(
+            onPressed: () => FirebaseCrashlytics.instance.crash(),
+            icon: const Icon(Icons.bug_report),
+          ),
+        ],
+      ),
       body: Center(child: Text("Counter: $counter")),
       floatingActionButton: FloatingActionButton(
         onPressed: () => ref.read(counterProvider.notifier).state = counter + 1,
