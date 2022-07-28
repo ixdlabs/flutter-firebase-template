@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
 
-// Colors
-const MaterialColor kPrimarySwatch = Colors.blue;
+class ColorConstants {
+  static const MaterialColor kPrimarySwatch = Colors.blue;
+}

@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase_template/router/router.gr.dart';
 import 'package:flutter_firebase_template/theme.dart';
 import 'package:logging/logging.dart';
 
@@ -22,16 +23,21 @@ void main() {
   });
 
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const MainApp());
+  runApp(MainApp());
 }
 
 class MainApp extends StatelessWidget {
-  const MainApp({Key? key}) : super(key: key);
+  final _appRouter = MainAppRouter();
+  final _appTheme = MainAppTheme();
+
+  MainApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: MainAppTheme().build(),
+    return MaterialApp.router(
+      routerDelegate: _appRouter.delegate(),
+      routeInformationParser: _appRouter.defaultRouteParser(),
+      theme: _appTheme.build(),
     );
   }
 }
