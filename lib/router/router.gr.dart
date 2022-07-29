@@ -17,15 +17,10 @@ import 'package:flutter_firebase_template/app/auth/login_page.dart' as _i4;
 import 'package:flutter_firebase_template/app/auth/profile_page.dart' as _i3;
 import 'package:flutter_firebase_template/app/auth/splash_page.dart' as _i1;
 import 'package:flutter_firebase_template/app/home/home_page.dart' as _i2;
-import 'package:flutter_firebase_template/router/auth_guard.dart' as _i7;
 
 class MainAppRouter extends _i5.RootStackRouter {
-  MainAppRouter(
-      {_i6.GlobalKey<_i6.NavigatorState>? navigatorKey,
-      required this.authGuard})
+  MainAppRouter([_i6.GlobalKey<_i6.NavigatorState>? navigatorKey])
       : super(navigatorKey);
-
-  final _i7.AuthGuard authGuard;
 
   @override
   final Map<String, _i5.PageFactory> pagesMap = {
@@ -50,10 +45,8 @@ class MainAppRouter extends _i5.RootStackRouter {
   @override
   List<_i5.RouteConfig> get routes => [
         _i5.RouteConfig(SplashRoute.name, path: '/'),
-        _i5.RouteConfig(HomeRoute.name,
-            path: '/home-page', guards: [authGuard]),
-        _i5.RouteConfig(ProfileRoute.name,
-            path: '/profile-page', guards: [authGuard]),
+        _i5.RouteConfig(HomeRoute.name, path: '/home-page'),
+        _i5.RouteConfig(ProfileRoute.name, path: '/profile-page'),
         _i5.RouteConfig(LoginRoute.name, path: '/login-page')
       ];
 }
