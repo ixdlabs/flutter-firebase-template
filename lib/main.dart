@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
@@ -5,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_firebase_template/firebase_options.dart';
 import 'package:flutter_firebase_template/logger/logger.dart';
 import 'package:flutter_firebase_template/logger/observers.dart';
+import 'package:flutter_firebase_template/providers/auth_provider.dart';
 import 'package:flutter_firebase_template/router/auth_guard.dart';
 import 'package:flutter_firebase_template/router/router.gr.dart';
 import 'package:flutter_firebase_template/theme.dart';
@@ -46,7 +48,10 @@ class MainApp extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final appRouter =
-        useMemoized(() => MainAppRouter(authGuard: AuthGuard(ref)), [ref]);
+        useMemoized(() => MainAppRouter(authGuard: AuthGuard()), []);
+    ref.listen<AsyncValue<User?>>(authStateChangesProvider, (previous, next) {
+      appRouter.authGuard.onAuthStateChange(next.value);
+    });
 
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,

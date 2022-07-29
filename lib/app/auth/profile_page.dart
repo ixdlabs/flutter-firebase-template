@@ -5,8 +5,8 @@ import 'package:flutter_firebase_template/router/router.gr.dart';
 import 'package:flutter_firebase_template/widgets/default_scaffold.dart';
 import 'package:flutterfire_ui/auth.dart';
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({Key? key}) : super(key: key);
+class ProfilePage extends StatelessWidget {
+  const ProfilePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,11 +14,11 @@ class LoginPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Login Page"),
       ),
-      body: SignInScreen(
+      body: ProfileScreen(
         actions: [
-          AuthStateChangeAction<SignedIn>((context, _) {
-            Log.i("User signed in");
-            context.replaceRoute(const HomeRoute());
+          SignedOutAction((context) {
+            Log.i("User signed out");
+            context.replaceRoute(const LoginRoute());
           }),
         ],
         providerConfigs: const [EmailProviderConfiguration()],
