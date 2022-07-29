@@ -7,7 +7,7 @@ typedef DocumentWithIdBuilder<T> = T Function(
 typedef QueryBuilder<T> = Query<Map<String, dynamic>> Function(
     Query<Map<String, dynamic>> query);
 
-class FirestoreService<T> {
+abstract class FirestoreService<T> {
   final CollectionReference<Map<String, dynamic>> collectionRef;
 
   FirestoreService({required this.collectionRef});

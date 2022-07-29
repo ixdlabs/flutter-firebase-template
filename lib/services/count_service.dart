@@ -14,23 +14,32 @@ abstract class CountService extends FirestoreService<Count> {
 
 class CountServiceImpl extends CountService {
   final User currentUser;
+  Count currentCount = Count(count: 0);
 
   CountServiceImpl({required super.collectionRef, required this.currentUser});
 
   @override
   Stream<Count?> getMyCount() {
-    return documentStream(docId: currentUser.uid, docBuilder: Count.fromJson);
+    return documentStream(
+      docId: currentUser.uid,
+      docBuilder: Count.fromJson,
+    ).map((count) {
+      if (count == null) {
+        currentCount = Count(count: 0);
+        return null;
+      }
+      currentCount = count;
+      return currentCount;
+    });
   }
 
   @override
   Future<void> incrementMyCount() async {
     try {
-      final currentCount = await documentFuture(
-          docId: currentUser.uid, docBuilder: Count.fromJson);
       await setData(
         docId: currentUser.uid,
         data: {
-          'count': (currentCount?.count ?? 0) + 1,
+          'count': currentCount.count + 1,
           'lastUpdated': FieldValue.serverTimestamp()
         },
       );
