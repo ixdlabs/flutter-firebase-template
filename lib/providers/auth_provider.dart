@@ -8,3 +8,7 @@ final firebaseAuthProvider = Provider<FirebaseAuth>(
 final authStateChangesProvider = StreamProvider.autoDispose<User?>(
     (ref) => ref.watch(firebaseAuthProvider).authStateChanges(),
     name: "auth_state_changes_provider");
+
+final authCurrentUserProvider = Provider<User?>(
+    (ref) => ref.watch(firebaseAuthProvider).currentUser,
+    name: "auth_current_user_provider");

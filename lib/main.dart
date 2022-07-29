@@ -8,6 +8,7 @@ import 'package:flutter_firebase_template/logger/observers.dart';
 import 'package:flutter_firebase_template/router/auth_guard.dart';
 import 'package:flutter_firebase_template/router/router.gr.dart';
 import 'package:flutter_firebase_template/theme.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logger/logger.dart';
 
@@ -24,29 +25,36 @@ void main() async {
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
   Log.i("Firebase initialized.");
 
-  runApp(const MainApp());
+  runApp(const MainAppProvider());
 }
 
-class MainApp extends StatelessWidget {
-  const MainApp({Key? key}) : super(key: key);
+class MainAppProvider extends StatelessWidget {
+  const MainAppProvider({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final appTheme = MainAppTheme();
-
     return ProviderScope(
       observers: [MainAppProviderObserver()],
-      child: Consumer(builder: (context, ref, child) {
-        final appRouter = MainAppRouter(authGuard: AuthGuard(ref));
-        return MaterialApp.router(
-          debugShowCheckedModeBanner: false,
-          routerDelegate: appRouter.delegate(
-            navigatorObservers: () => [MainAppNavigationObserver()],
-          ),
-          routeInformationParser: appRouter.defaultRouteParser(),
-          theme: appTheme.build(),
-        );
-      }),
+      child: const MainApp(),
+    );
+  }
+}
+
+class MainApp extends HookConsumerWidget {
+  const MainApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final appRouter =
+        useMemoized(() => MainAppRouter(authGuard: AuthGuard(ref)), [ref]);
+
+    return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
+      routerDelegate: appRouter.delegate(
+        navigatorObservers: () => [MainAppNavigationObserver()],
+      ),
+      routeInformationParser: appRouter.defaultRouteParser(),
+      theme: MainAppTheme().build(),
     );
   }
 }
