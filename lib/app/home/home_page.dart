@@ -1,7 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_firebase_template/providers/counter_provider.dart';
+import 'package:flutter_firebase_template/models/count.dart';
+import 'package:flutter_firebase_template/providers/count_provider.dart';
 import 'package:flutter_firebase_template/router/router.gr.dart';
 import 'package:flutter_firebase_template/widgets/default_scaffold.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -11,7 +12,7 @@ class HomePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final counter = ref.watch(counterProvider);
+    final countService = ref.watch(countServiceProvider);
 
     return DefaultScaffold(
       appBar: AppBar(
@@ -27,8 +28,16 @@ class HomePage extends ConsumerWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text("Counter: $counter",
-                style: Theme.of(context).textTheme.headline4),
+            StreamBuilder<Count?>(
+              stream: countService?.getMyCount(),
+              builder: (context, snapshot) {
+                return snapshot.hasData && snapshot.data != null
+                    ? Text("My count: ${snapshot.data!.count}",
+                        style: Theme.of(context).textTheme.headline4)
+                    : Text("Loading...",
+                        style: Theme.of(context).textTheme.headline4);
+              },
+            ),
             const SizedBox(height: 16),
             ElevatedButton(
               child: const Text("Go to my Profile"),
@@ -38,7 +47,7 @@ class HomePage extends ConsumerWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => ref.read(counterProvider.notifier).state = counter + 1,
+        onPressed: () => countService?.incrementMyCount(),
         child: const Icon(Icons.add),
       ),
     );
