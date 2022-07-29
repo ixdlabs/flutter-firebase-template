@@ -12,7 +12,7 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return DefaultScaffold(
       appBar: AppBar(
-        title: const Text("Login Page"),
+        title: const Text("Profile Page"),
       ),
       body: ProfileScreen(
         actions: [
