@@ -18,10 +18,10 @@ class SplashPage extends HookConsumerWidget {
       if (authState.hasValue) {
         if (authState.value == null) {
           Log.i("User is not logged in, redirecting to login page");
-          router.replace(const LoginRoute());
+          router.replaceAll(const [LoginRoute()]);
         } else {
           Log.i("User is logged in, redirecting to home page");
-          router.replace(const HomeRoute());
+          router.replaceAll(const [HomeRoute()]);
         }
       }
       return null;

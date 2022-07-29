@@ -18,7 +18,7 @@ class LoginPage extends StatelessWidget {
         actions: [
           AuthStateChangeAction<SignedIn>((context, _) {
             Log.i("User signed in");
-            context.replaceRoute(const HomeRoute());
+            context.router.replaceAll(const [HomeRoute()]);
           }),
         ],
         providerConfigs: const [EmailProviderConfiguration()],

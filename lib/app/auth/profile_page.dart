@@ -18,7 +18,7 @@ class ProfilePage extends StatelessWidget {
         actions: [
           SignedOutAction((context) {
             Log.i("User signed out");
-            context.replaceRoute(const LoginRoute());
+            context.router.replaceAll(const [LoginRoute()]);
           }),
         ],
         providerConfigs: const [EmailProviderConfiguration()],
