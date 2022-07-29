@@ -10,15 +10,6 @@ class MainAppTheme {
           borderRadius: BorderRadius.circular(8),
         ),
       ),
-      outlinedButtonTheme: OutlinedButtonThemeData(
-        style: ButtonStyle(
-          padding: MaterialStateProperty.all<EdgeInsets>(
-            const EdgeInsets.all(24),
-          ),
-          backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
-          foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-        ),
-      ),
     );
   }
 }

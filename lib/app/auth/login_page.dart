@@ -1,21 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_template/widgets/default_scaffold.dart';
 import 'package:flutterfire_ui/auth.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class LoginPage extends ConsumerWidget {
+class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return DefaultScaffold(
       appBar: AppBar(
         title: const Text("Login Page"),
       ),
-      body: SignInScreen(
-        providerConfigs: [
-          EmailProviderConfiguration(),
-        ],
+      body: const SignInScreen(
+        providerConfigs: [EmailProviderConfiguration()],
       ),
     );
   }
