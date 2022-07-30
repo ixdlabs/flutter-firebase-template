@@ -79,8 +79,16 @@ class CountWidget extends ConsumerWidget {
     final countNumber = ref.watch(countNumberProvider);
 
     return countNumber.when(
-      data: (count) => Text("My count: ${count?.count}",
-          style: Theme.of(context).textTheme.headline4),
+      data: (count) => Column(
+        children: [
+          Text("My count: ${count?.count}",
+              style: Theme.of(context).textTheme.headline4),
+          const SizedBox(height: 8),
+          if (count?.lastUpdated != null)
+            Text("Last updated: ${count!.lastUpdated!.toIso8601String()}",
+                style: Theme.of(context).textTheme.subtitle1),
+        ],
+      ),
       error: (error, st) =>
           Text("Error: $error", style: Theme.of(context).textTheme.headline4),
       loading: () =>
