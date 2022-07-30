@@ -12,11 +12,15 @@ class FcmServiceImpl extends FcmService {
       importance: Importance.max);
   final _localNotificationPlugin = FlutterLocalNotificationsPlugin();
   final _fcmEventStreamController = StreamController<FcmEvent>();
-  late final StreamSubscription<RemoteMessage> _fcmSubscription;
+
+  StreamSubscription? _fcmOnMessageOpenedAppSubscription;
+  StreamSubscription? _fcmOnMessageSubscription;
 
   FcmServiceImpl() {
     // Listen to incoming messages.
-    _fcmSubscription = FirebaseMessaging.onMessageOpenedApp.listen((message) {
+    _fcmOnMessageOpenedAppSubscription =
+        FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      Log.i("FCM message opened app: $message");
       _fcmEventStreamController.add(FcmEvent(message.data));
     });
     _initializeLocalNotifications();
@@ -24,7 +28,9 @@ class FcmServiceImpl extends FcmService {
 
   @override
   void dispose() {
-    _fcmSubscription.cancel();
+    Log.d("FCM service disposed.");
+    _fcmOnMessageOpenedAppSubscription?.cancel();
+    _fcmOnMessageSubscription?.cancel();
     _fcmEventStreamController.close();
   }
 
@@ -33,6 +39,7 @@ class FcmServiceImpl extends FcmService {
 
   @override
   void handleInitialMessage() async {
+    Log.d("Handling initial FCM message.");
     final initialMessage = await FirebaseMessaging.instance.getInitialMessage();
     if (initialMessage != null) {
       _fcmEventStreamController.add(FcmEvent(initialMessage.data));
@@ -57,6 +64,7 @@ class FcmServiceImpl extends FcmService {
     );
     await _localNotificationPlugin.initialize(initializationSettings,
         onSelectNotification: (payload) {
+      Log.i("Local notification selected: $payload");
       try {
         if (payload == null) return;
         final Map<String, dynamic> notificationData = json.decode(payload);
@@ -65,11 +73,44 @@ class FcmServiceImpl extends FcmService {
         Log.e('Error handling local notification payload', e, st);
       }
     });
+
+    _connectFcmToLocalNotifications();
+  }
+
+  void _connectFcmToLocalNotifications() {
+    assert(
+        _fcmOnMessageSubscription == null, "FCM subscription already exists");
+
+    _fcmOnMessageSubscription = FirebaseMessaging.onMessage.listen((message) {
+      Log.i("FCM message received: $message");
+      final notification = message.notification;
+
+      // If `onMessage` is triggered with a notification, construct our own
+      // local notification to show to users using the created channel.
+      // We dont send a local notification if the notification is for new messages.
+      if (notification != null) {
+        _localNotificationPlugin.show(
+          notification.hashCode,
+          notification.title,
+          notification.body,
+          NotificationDetails(
+            android: AndroidNotificationDetails(
+              _localChannel.id,
+              _localChannel.name,
+              icon: "@mipmap/ic_launcher",
+            ),
+          ),
+          payload: json.encode(message.data),
+        );
+      }
+    });
   }
 
   @override
   void sendSelfNotification(String title, String body) async {
     try {
+      Log.i("Sending self notification: $title, $body");
+
       final notificationDetails = NotificationDetails(
         android: AndroidNotificationDetails(
           _localChannel.id,
