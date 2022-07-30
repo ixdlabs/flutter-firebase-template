@@ -42,8 +42,9 @@ dependencies:
   cloud_firestore: ^3.4.2
   firebase_auth: ^3.6.1
   firebase_crashlytics: ^2.8.6
-  flutterfire_ui: ^0.4.3+3
   firebase_messaging: ^12.0.1
+  flutterfire_ui: ^0.4.3+3
+  flutter_local_notifications: ^9.7.0
 
 dev_dependencies:
   flutter_test:
