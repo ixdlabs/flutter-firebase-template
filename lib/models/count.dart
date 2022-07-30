@@ -20,4 +20,9 @@ class Count {
         'count': count ?? FieldValue.increment(1),
         'lastUpdated': FieldValue.serverTimestamp(),
       };
+
+  @override
+  String toString() {
+    return 'Count{count: $count, lastUpdated: $lastUpdated}';
+  }
 }

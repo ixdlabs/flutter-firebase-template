@@ -1,10 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_firebase_template/models/count.dart';
 import 'package:flutter_firebase_template/providers/count_provider.dart';
 import 'package:flutter_firebase_template/router/router.gr.dart';
-import 'package:flutter_firebase_template/utils/snapshot_utils.dart';
 import 'package:flutter_firebase_template/widgets/default_scaffold.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -13,8 +11,6 @@ class HomePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final countService = ref.watch(countServiceProvider);
-
     return DefaultScaffold(
       appBar: AppBar(
         title: const Text("Home Page"),
@@ -29,17 +25,7 @@ class HomePage extends ConsumerWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            StreamBuilder<Count?>(
-              stream: countService?.getMyCount(),
-              builder: (context, snapshot) {
-                return snapshot.when(
-                  onData: (count) => Text(
-                    "My count: ${count?.count}",
-                    style: Theme.of(context).textTheme.headline4,
-                  ),
-                );
-              },
-            ),
+            const CountWidget(),
             const SizedBox(height: 16),
             ElevatedButton(
               child: const Text("Go to my Profile"),
@@ -49,9 +35,27 @@ class HomePage extends ConsumerWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => countService?.incrementMyCount(),
+        onPressed: () => ref.read(countServiceProvider)?.incrementMyCount(),
         child: const Icon(Icons.add),
       ),
+    );
+  }
+}
+
+class CountWidget extends ConsumerWidget {
+  const CountWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final countNumber = ref.watch(countNumberProvider);
+
+    return countNumber.when(
+      data: (count) => Text("My count: ${count?.count}",
+          style: Theme.of(context).textTheme.headline4),
+      error: (error, st) =>
+          Text("Error: $error", style: Theme.of(context).textTheme.headline4),
+      loading: () =>
+          Text("Loading...", style: Theme.of(context).textTheme.headline4),
     );
   }
 }

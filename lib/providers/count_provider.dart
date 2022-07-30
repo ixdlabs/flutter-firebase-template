@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_firebase_template/models/count.dart';
 import 'package:flutter_firebase_template/providers/auth_provider.dart';
 import 'package:flutter_firebase_template/services/count_service.dart';
 import 'package:flutter_firebase_template/services/count_service_impl.dart';
@@ -12,3 +13,9 @@ final countServiceProvider = Provider.autoDispose<CountService?>((ref) {
     currentUser: currentUser,
   );
 }, name: "count_service_provider");
+
+final countNumberProvider = StreamProvider.autoDispose<Count?>((ref) {
+  final countService = ref.watch(countServiceProvider);
+  if (countService == null) return const Stream.empty();
+  return countService.getMyCount();
+}, name: "count_number_provider");
