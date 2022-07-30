@@ -2,22 +2,23 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_firebase_template/models/serializers/timestamp_serializer.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'count.g.dart';
+part 'fcm_token.g.dart';
 
 @JsonSerializable()
 @TimestampConverter()
-class Count {
-  final int count;
+class FcmToken {
+  final List<String> tokens;
   final DateTime? lastUpdated;
 
-  Count({required this.count, this.lastUpdated});
+  FcmToken({required this.tokens, this.lastUpdated});
 
-  factory Count.fromJson(Map<String, dynamic> json) => _$CountFromJson(json);
+  factory FcmToken.fromJson(Map<String, dynamic> json) =>
+      _$FcmTokenFromJson(json);
 
-  Map<String, dynamic> toJson() => _$CountToJson(this);
+  Map<String, dynamic> toJson() => _$FcmTokenToJson(this);
 
   @override
   String toString() {
-    return 'Count{count: $count, lastUpdated: $lastUpdated}';
+    return 'FcmToken{tokens: $tokens}';
   }
 }

@@ -1,34 +1,29 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_firebase_template/logger/logger.dart';
-import 'package:flutter_firebase_template/models/count.dart';
-import 'package:flutter_firebase_template/services/count_service.dart';
+import 'package:flutter_firebase_template/services/fcm_token_service.dart';
 
-class CountServiceImpl extends CountService {
+class FcmTokenServiceImpl extends FcmTokenService {
   final User currentUser;
 
-  CountServiceImpl({
+  FcmTokenServiceImpl({
     required super.collectionRef,
     required this.currentUser,
   });
 
   @override
-  Stream<Count?> getMyCount() {
-    return documentStream(currentUser.uid, docBuilder: Count.fromJson);
-  }
-
-  @override
-  Future<void> incrementMyCount() async {
+  Future<void> storeToken(String token) async {
+    Log.i("Storing FCM token: $token");
     try {
       await createOrUpdate(currentUser.uid, createData: {
-        'count': 1,
+        'tokens': [token],
         'lastUpdated': FieldValue.serverTimestamp(),
       }, updateData: {
-        'count': FieldValue.increment(1),
+        'tokens': FieldValue.arrayUnion([token]),
         'lastUpdated': FieldValue.serverTimestamp(),
       });
     } catch (e, st) {
-      Log.e("Error incrementing count", e, st);
+      Log.e("Error saving token", e, st);
     }
   }
 }

@@ -4,9 +4,12 @@ import 'dart:convert';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_firebase_template/logger/logger.dart';
 import 'package:flutter_firebase_template/services/fcm_service.dart';
+import 'package:flutter_firebase_template/services/fcm_token_service.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class FcmServiceImpl extends FcmService {
+  final FcmTokenService? fcmTokenService;
+
   final _localChannel = const AndroidNotificationChannel(
       'high_importance_channel', 'High Importance Notifications',
       importance: Importance.max);
@@ -17,7 +20,7 @@ class FcmServiceImpl extends FcmService {
   StreamSubscription? _fcmOnMessageSubscription;
   StreamSubscription? _fcmOnTokenRefreshSubscription;
 
-  FcmServiceImpl() {
+  FcmServiceImpl(this.fcmTokenService) {
     // Listen to incoming messages.
     _fcmOnMessageOpenedAppSubscription =
         FirebaseMessaging.onMessageOpenedApp.listen((message) {
@@ -54,7 +57,7 @@ class FcmServiceImpl extends FcmService {
 
   void _storeFcmToken(String? token) {
     if (token == null) return;
-    Log.i("Storing FCM token: $token");
+    fcmTokenService?.storeToken(token);
   }
 
   /// Initialize Local Notifications.

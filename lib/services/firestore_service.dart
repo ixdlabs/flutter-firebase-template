@@ -54,4 +54,18 @@ abstract class FirestoreService<T> {
     if (docData == null) return null;
     return docBuilder(docData);
   }
+
+  Future<void> createOrUpdate(String docId,
+      {required Map<String, dynamic> createData,
+      required Map<String, dynamic> updateData}) async {
+    assert(createData != updateData,
+        "Both createData and updateData are be the same. Use document.set instead.");
+    final docRef = collectionRef.doc(docId);
+    final doc = await docRef.get();
+    if (doc.exists) {
+      await docRef.update(updateData);
+    } else {
+      await docRef.set(createData);
+    }
+  }
 }
