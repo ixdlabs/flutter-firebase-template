@@ -31,8 +31,6 @@ fvm flutter run
    services)
 7. Crash app using top right button and use dashboard to make sure crashlytics integration works.
 
-> TODO: Guide on using emulator.
-
 ## Design Choices
 
 ### State Management
@@ -95,3 +93,10 @@ warning) or `Log.e("message")` (for error). You may also pass an `Exception` and
 as `Log.e("message", e, stackTrace)`.
 
 Note: If the logs are crowded with unnecessary logs, apply following filter (VS Code): `I/flutter`
+
+## Future Work
+
+- [ ] Guide on using Firebase emulator
+- [ ] Integrate FCM
+- [ ] Integrate Notifications
+- [ ] Guide on replacing texts and creating new project
