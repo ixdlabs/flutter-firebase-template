@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_firebase_template/logger/logger.dart';
 import 'package:flutter_firebase_template/models/count.dart';
@@ -14,35 +13,24 @@ abstract class CountService extends FirestoreService<Count> {
 
 class CountServiceImpl extends CountService {
   final User currentUser;
-  Count currentCount = Count(count: 0);
 
   CountServiceImpl({required super.collectionRef, required this.currentUser});
 
   @override
   Stream<Count?> getMyCount() {
-    return documentStream(
-      docId: currentUser.uid,
-      docBuilder: Count.fromJson,
-    ).map((count) {
-      if (count == null) {
-        currentCount = Count(count: 0);
-        return null;
-      }
-      currentCount = count;
-      return currentCount;
-    });
+    return documentStream(currentUser.uid, docBuilder: Count.fromJson);
   }
 
   @override
   Future<void> incrementMyCount() async {
     try {
-      await setData(
-        docId: currentUser.uid,
-        data: {
-          'count': currentCount.count + 1,
-          'lastUpdated': FieldValue.serverTimestamp()
-        },
-      );
+      final docRef = collectionRef.doc(currentUser.uid);
+      final doc = await docRef.get();
+      if (doc.exists) {
+        await docRef.update(Count.updatedJson());
+      } else {
+        await docRef.set(Count.updatedJson(count: 1));
+      }
     } catch (e, st) {
       Log.e("Error incrementing count", e, st);
       return Future.error(e);

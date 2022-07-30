@@ -15,4 +15,9 @@ class Count {
   factory Count.fromJson(Map<String, dynamic> json) => _$CountFromJson(json);
 
   Map<String, dynamic> toJson() => _$CountToJson(this);
+
+  static Map<String, dynamic> updatedJson({int? count}) => {
+        'count': count ?? FieldValue.increment(1),
+        'lastUpdated': FieldValue.serverTimestamp(),
+      };
 }

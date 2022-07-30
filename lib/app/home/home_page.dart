@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_firebase_template/models/count.dart';
 import 'package:flutter_firebase_template/providers/count_provider.dart';
 import 'package:flutter_firebase_template/router/router.gr.dart';
+import 'package:flutter_firebase_template/utils/snapshot_utils.dart';
 import 'package:flutter_firebase_template/widgets/default_scaffold.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -31,11 +32,12 @@ class HomePage extends ConsumerWidget {
             StreamBuilder<Count?>(
               stream: countService?.getMyCount(),
               builder: (context, snapshot) {
-                return snapshot.hasData && snapshot.data != null
-                    ? Text("My count: ${snapshot.data!.count}",
-                        style: Theme.of(context).textTheme.headline4)
-                    : Text("Loading...",
-                        style: Theme.of(context).textTheme.headline4);
+                return snapshot.when(
+                  onData: (count) => Text(
+                    "My count: ${count?.count}",
+                    style: Theme.of(context).textTheme.headline4,
+                  ),
+                );
               },
             ),
             const SizedBox(height: 16),
