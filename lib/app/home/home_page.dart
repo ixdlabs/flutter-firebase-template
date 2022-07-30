@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_template/providers/count_provider.dart';
+import 'package:flutter_firebase_template/providers/fcm_provider.dart';
 import 'package:flutter_firebase_template/router/router.gr.dart';
 import 'package:flutter_firebase_template/widgets/default_scaffold.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -30,6 +31,14 @@ class HomePage extends ConsumerWidget {
             ElevatedButton(
               child: const Text("Go to my Profile"),
               onPressed: () => context.pushRoute(const ProfileRoute()),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              child: const Text("Send myself a Notification"),
+              onPressed: () {
+                ref.read(fcmServiceProvider).sendSelfNotification(
+                    "Hello World", "This is a test notification");
+              },
             ),
           ],
         ),

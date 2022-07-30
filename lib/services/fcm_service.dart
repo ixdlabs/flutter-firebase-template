@@ -2,6 +2,9 @@ class FcmEvent {
   final Map<String, dynamic> data;
 
   FcmEvent(this.data);
+
+  @override
+  String toString() => 'FcmEvent{data: $data}';
 }
 
 abstract class FcmService {
@@ -9,6 +12,8 @@ abstract class FcmService {
   void handleInitialMessage();
 
   Stream<FcmEvent> get fcmEventStream;
+
+  void sendSelfNotification(String title, String body);
 
   /// Dispose any resources/connections used by the service.
   void dispose();

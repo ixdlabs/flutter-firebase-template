@@ -66,4 +66,22 @@ class FcmServiceImpl extends FcmService {
       }
     });
   }
+
+  @override
+  void sendSelfNotification(String title, String body) async {
+    try {
+      final notificationDetails = NotificationDetails(
+        android: AndroidNotificationDetails(
+          _localChannel.id,
+          _localChannel.name,
+          importance: _localChannel.importance,
+        ),
+        iOS: const IOSNotificationDetails(),
+      );
+      await _localNotificationPlugin.show(0, title, body, notificationDetails,
+          payload: '{}');
+    } catch (e, st) {
+      Log.e('Error sending self notification', e, st);
+    }
+  }
 }
