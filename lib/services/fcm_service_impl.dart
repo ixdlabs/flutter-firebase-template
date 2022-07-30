@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_firebase_template/logger/logger.dart';
 import 'package:flutter_firebase_template/services/fcm_service.dart';
 
@@ -8,32 +11,33 @@ class FcmServiceImpl extends FcmService {
   //   importance: Importance.max,
   // );
   // final _localNotificationPlugin = FlutterLocalNotificationsPlugin();
+  late final StreamSubscription _fcmSubscription;
 
   FcmServiceImpl({required super.handlers});
 
   @override
-  void initialize() async {
+  void initialize() {
     _initializeFcm();
     _initializeLocalNotifications();
   }
 
   @override
-  void dispose() async {
+  void dispose() {
     // _localNotificationPlugin.cancelAll();
-    // FirebaseMessaging().unsubscribeFromTopic('all');
+    _fcmSubscription.cancel();
   }
 
   /// Initialize Firebase Cloud Messaging.
-  /// Make sure to handle the notification if the app was opened by a push notification.
   Future<void> _initializeFcm() async {
-    // await FirebaseMessaging.instance.requestPermission();
-    // await FirebaseMessaging.instance
-    //     .setForegroundNotificationPresentationOptions(
-    //         alert: true, badge: true, sound: true);
-    // FirebaseMessaging.onMessageOpenedApp.listen((notification) {
-    //   if (notification == null) return;
-    //   handleNotification(notification.data);
-    // });
+    // Listen to incoming messages.
+    _fcmSubscription = FirebaseMessaging.onMessageOpenedApp
+        .listen((message) => handleMessage(message.data));
+
+    /// Make sure to handle the notification if the app was opened by a push notification.
+    final initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+    if (initialMessage != null) {
+      handleMessage(initialMessage.data);
+    }
   }
 
   /// Initialize Local Notifications.
@@ -57,7 +61,7 @@ class FcmServiceImpl extends FcmService {
     //   onSelectNotification: (payload) async {
     //     try {
     //       final notificationData = json.decode(payload);
-    //       handleNotification(notificationData);
+    //       handleMessage(notificationData);
     //     } catch (e) {
     //       print(e);
     //     }
@@ -68,8 +72,8 @@ class FcmServiceImpl extends FcmService {
 
 class DemoFcmHandler extends FcmHandler {
   @override
-  Future<bool> handleNotification(Map<String, dynamic> notificationData) async {
-    Log.i("Notification data: $notificationData");
+  Future<bool> handleMessage(Map<String, dynamic> messageData) async {
+    Log.i("Message data: $messageData");
     return false;
   }
 

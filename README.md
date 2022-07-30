@@ -18,6 +18,12 @@ fvm flutter run
 1. Authentication https://firebase.flutter.dev/docs/auth/start
 2. Firestore https://firebase.flutter.dev/docs/firestore/usage
 3. Crashlytics https://firebase.flutter.dev/docs/crashlytics/usage
+4. Cloud Messaging https://firebase.flutter.dev/docs/messaging/usage
+
+> Emulator Setup:
+>
+> - https://firebase.flutter.dev/docs/auth/start/#optional-prototype-and-test-with-firebase-local-emulator-suite
+> - https://firebase.flutter.dev/docs/firestore/usage/#emulator-usage
 
 ### Flutter setup
 
@@ -62,10 +68,6 @@ Each service will also accompany a abstract class (which defines the interface) 
 
 The providers are in `lib/providers` directory.
 
-```shell
-fvm flutter pub run build_runner build --delete-conflicting-outputs
-```
-
 ### Routing
 
 This project uses [Auto Route](https://pub.dev/packages/auto_route) to handle routing.
@@ -100,3 +102,4 @@ Note: If the logs are crowded with unnecessary logs, apply following filter (VS 
 - [ ] Integrate FCM
 - [ ] Integrate Notifications
 - [ ] Guide on replacing texts and creating new project
+- [ ] iOS Configurations
