@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_firebase_template/firebase_options.dart';
 import 'package:flutter_firebase_template/logger/logger.dart';
 import 'package:flutter_firebase_template/logger/observers.dart';
+import 'package:flutter_firebase_template/providers/fcm_provider.dart';
 import 'package:flutter_firebase_template/router/router.gr.dart';
 import 'package:flutter_firebase_template/theme.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -47,12 +48,22 @@ class MainAppProvider extends StatelessWidget {
   }
 }
 
-class MainApp extends HookWidget {
+class MainApp extends HookConsumerWidget {
   const MainApp({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final appRouter = useMemoized(() => MainAppRouter(), []);
+
+    // Handle all fcm events.
+    useEffect(() {
+      final fcmService = ref.read(fcmServiceProvider);
+      final subscription = fcmService.fcmEventStream.listen((event) {
+        Log.i("FCM event: $event");
+      });
+      fcmService.handleInitialMessage();
+      return subscription.cancel;
+    }, [ref]);
 
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,

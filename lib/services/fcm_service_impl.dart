@@ -11,31 +11,31 @@ class FcmServiceImpl extends FcmService {
       'high_importance_channel', 'High Importance Notifications',
       importance: Importance.max);
   final _localNotificationPlugin = FlutterLocalNotificationsPlugin();
-  late final StreamSubscription _fcmSubscription;
+  final _fcmEventStreamController = StreamController<FcmEvent>();
+  late final StreamSubscription<RemoteMessage> _fcmSubscription;
 
-  FcmServiceImpl({required super.handlers});
-
-  @override
-  void initialize() {
-    _initializeFcm();
+  FcmServiceImpl() {
+    // Listen to incoming messages.
+    _fcmSubscription = FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      _fcmEventStreamController.add(FcmEvent(message.data));
+    });
     _initializeLocalNotifications();
   }
 
   @override
   void dispose() {
     _fcmSubscription.cancel();
+    _fcmEventStreamController.close();
   }
 
-  /// Initialize Firebase Cloud Messaging.
-  Future<void> _initializeFcm() async {
-    // Listen to incoming messages.
-    _fcmSubscription = FirebaseMessaging.onMessageOpenedApp
-        .listen((message) => handleMessage(message.data));
+  @override
+  Stream<FcmEvent> get fcmEventStream => _fcmEventStreamController.stream;
 
-    /// Make sure to handle the notification if the app was opened by a push notification.
+  @override
+  void handleInitialMessage() async {
     final initialMessage = await FirebaseMessaging.instance.getInitialMessage();
     if (initialMessage != null) {
-      handleMessage(initialMessage.data);
+      _fcmEventStreamController.add(FcmEvent(initialMessage.data));
     }
   }
 
@@ -55,28 +55,15 @@ class FcmServiceImpl extends FcmService {
         requestAlertPermission: true,
       ),
     );
-    await _localNotificationPlugin.initialize(
-      initializationSettings,
-      onSelectNotification: (payload) async {
-        try {
-          if (payload == null) return;
-          final notificationData = json.decode(payload);
-          handleMessage(notificationData);
-        } catch (e, st) {
-          Log.e('Error handling local notification payload', e, st);
-        }
-      },
-    );
+    await _localNotificationPlugin.initialize(initializationSettings,
+        onSelectNotification: (payload) {
+      try {
+        if (payload == null) return;
+        final Map<String, dynamic> notificationData = json.decode(payload);
+        _fcmEventStreamController.add(FcmEvent(notificationData));
+      } catch (e, st) {
+        Log.e('Error handling local notification payload', e, st);
+      }
+    });
   }
-}
-
-class DemoFcmHandler extends FcmHandler {
-  @override
-  Future<bool> handleMessage(Map<String, dynamic> messageData) async {
-    Log.i("Message data: $messageData");
-    return false;
-  }
-
-  @override
-  String get name => "demo_fcm_handler";
 }

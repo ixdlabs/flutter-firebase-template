@@ -1,32 +1,15 @@
-import 'package:flutter_firebase_template/logger/logger.dart';
+class FcmEvent {
+  final Map<String, dynamic> data;
 
-abstract class FcmHandler {
-  String get name;
-
-  Future<bool> handleMessage(Map<String, dynamic> messageData);
+  FcmEvent(this.data);
 }
 
 abstract class FcmService {
-  final List<FcmHandler> handlers;
+  /// Handle the notification if the app was opened by a push notification.
+  void handleInitialMessage();
 
-  FcmService({required this.handlers});
+  Stream<FcmEvent> get fcmEventStream;
 
-  void initialize();
-
+  /// Dispose any resources/connections used by the service.
   void dispose();
-
-  Future<void> handleMessage(Map<String, dynamic> messageData) async {
-    for (final handler in handlers) {
-      try {
-        final handled = await handler.handleMessage(messageData);
-        if (handled) {
-          Log.i('Message handled by ${handler.name}: $messageData');
-          return;
-        }
-      } catch (e, st) {
-        Log.e('Error [${handler.name}] handling message data', e, st);
-      }
-    }
-    Log.w('No handler handled message data: $messageData');
-  }
 }
