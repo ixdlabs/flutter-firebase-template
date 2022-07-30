@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import 'package:flutter_firebase_template/utils/messenger/messager_impl.dart';
+import 'package:flutter_firebase_template/utils/messenger/messenger_impl.dart';
 
 abstract class Messenger {
   final BuildContext context;
