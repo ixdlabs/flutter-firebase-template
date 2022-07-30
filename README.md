@@ -36,6 +36,9 @@ fvm flutter run
 6. Use `flutterfire configure` to configure the project. (Run this again if you change the application id/add new
    services)
 7. Crash app using top right button and use dashboard to make sure crashlytics integration works.
+8. Send a self notification to make sure local notifications integration works.
+9. Send a test notification via the dashboard (The FCM registration token will be logged in to the console) and check if
+   it arrives (Both when app is in foreground/background). Tapping it should show a success message.
 
 ## Design Choices
 
@@ -99,6 +102,7 @@ Note: If the logs are crowded with unnecessary logs, apply following filter (VS 
 ## Future Work
 
 - [ ] Guide on using Firebase emulator
-- [ ] Local Notifications Release Config (https://pub.dev/packages/flutter_local_notifications#release-build-configuration)
+- [ ] Local Notifications Release
+  Config (https://pub.dev/packages/flutter_local_notifications#release-build-configuration)
 - [ ] Guide on replacing texts and creating new project
 - [ ] iOS Configurations

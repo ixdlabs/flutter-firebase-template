@@ -11,10 +11,11 @@ class FcmServiceImpl extends FcmService {
       'high_importance_channel', 'High Importance Notifications',
       importance: Importance.max);
   final _localNotificationPlugin = FlutterLocalNotificationsPlugin();
-  final _fcmEventStreamController = StreamController<FcmEvent>();
+  final _fcmEventStreamController = StreamController<FcmEvent>.broadcast();
 
   StreamSubscription? _fcmOnMessageOpenedAppSubscription;
   StreamSubscription? _fcmOnMessageSubscription;
+  StreamSubscription? _fcmOnTokenRefreshSubscription;
 
   FcmServiceImpl() {
     // Listen to incoming messages.
@@ -23,6 +24,10 @@ class FcmServiceImpl extends FcmService {
       Log.i("FCM message opened app: $message");
       _fcmEventStreamController.add(FcmEvent(message.data));
     });
+
+    FirebaseMessaging.instance.getToken().then(_storeFcmToken);
+    _fcmOnTokenRefreshSubscription =
+        FirebaseMessaging.instance.onTokenRefresh.listen(_storeFcmToken);
     _initializeLocalNotifications();
   }
 
@@ -30,6 +35,7 @@ class FcmServiceImpl extends FcmService {
   void dispose() {
     Log.d("FCM service disposed.");
     _fcmOnMessageOpenedAppSubscription?.cancel();
+    _fcmOnTokenRefreshSubscription?.cancel();
     _fcmOnMessageSubscription?.cancel();
     _fcmEventStreamController.close();
   }
@@ -44,6 +50,11 @@ class FcmServiceImpl extends FcmService {
     if (initialMessage != null) {
       _fcmEventStreamController.add(FcmEvent(initialMessage.data));
     }
+  }
+
+  void _storeFcmToken(String? token) {
+    if (token == null) return;
+    Log.i("Storing FCM token: $token");
   }
 
   /// Initialize Local Notifications.
