@@ -12,9 +12,15 @@ class FcmServiceImpl extends FcmService {
   FcmServiceImpl({required super.handlers});
 
   @override
-  Future<void> initialize() async {
+  void initialize() async {
     _initializeFcm();
     _initializeLocalNotifications();
+  }
+
+  @override
+  void dispose() async {
+    // _localNotificationPlugin.cancelAll();
+    // FirebaseMessaging().unsubscribeFromTopic('all');
   }
 
   /// Initialize Firebase Cloud Messaging.

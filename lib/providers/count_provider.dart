@@ -4,7 +4,7 @@ import 'package:flutter_firebase_template/services/count_service.dart';
 import 'package:flutter_firebase_template/services/count_service_impl.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final countServiceProvider = Provider<CountService?>((ref) {
+final countServiceProvider = Provider.autoDispose<CountService?>((ref) {
   final currentUser = ref.watch(authCurrentUserProvider);
   if (currentUser == null) return null;
   return CountServiceImpl(

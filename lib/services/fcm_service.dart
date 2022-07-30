@@ -11,7 +11,9 @@ abstract class FcmService {
 
   FcmService({required this.handlers});
 
-  Future<void> initialize();
+  void initialize();
+
+  void dispose();
 
   Future<void> handleNotification(Map<String, dynamic> notificationData) async {
     for (final handler in handlers) {
