@@ -11,4 +11,4 @@ final countServiceProvider = Provider<CountService?>((ref) {
     collectionRef: FirebaseFirestore.instance.collection("counts"),
     currentUser: currentUser,
   );
-});
+}, name: "count_service_provider");
