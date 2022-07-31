@@ -1,4 +1,4 @@
-import 'package:flutter_firebase_template/extensions/version_utils.dart';
+import 'package:flutter_firebase_template/utils/version_utils.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -29,7 +29,7 @@ void main() {
     expect("2.0".hasHigherVersionThan("1.0.0"), true);
     expect("3".hasHigherVersionThan("2.10.4"), true);
 
-    // Test version when there is a invalid string (always false)
+    // Test version when there is a invalid string (take string parts as 0)
     expect("ABC".hasHigherVersionThan("0.9.0"), false);
     expect("1.0.0".hasHigherVersionThan("ABC"), true);
     expect("ABC".hasHigherVersionThan("ABC"), false);
