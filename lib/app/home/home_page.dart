@@ -81,7 +81,7 @@ class CountWidget extends ConsumerWidget {
     return countNumber.when(
       data: (count) => Column(
         children: [
-          Text("My count: ${count?.count}",
+          Text("My count: ${count?.count ?? 0}",
               style: Theme.of(context).textTheme.headline4),
           const SizedBox(height: 8),
           if (count?.lastUpdated != null)

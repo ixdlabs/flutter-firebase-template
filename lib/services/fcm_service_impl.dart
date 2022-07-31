@@ -6,9 +6,11 @@ import 'package:flutter_firebase_template/logger/logger.dart';
 import 'package:flutter_firebase_template/services/fcm_service.dart';
 import 'package:flutter_firebase_template/services/fcm_token_service.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class FcmServiceImpl extends FcmService {
   final FcmTokenService? fcmTokenService;
+  final StateController<bool> fcmInitialMessageHandled;
 
   final _localChannel = const AndroidNotificationChannel(
       'high_importance_channel', 'High Importance Notifications',
@@ -20,7 +22,7 @@ class FcmServiceImpl extends FcmService {
   StreamSubscription? _fcmOnMessageSubscription;
   StreamSubscription? _fcmOnTokenRefreshSubscription;
 
-  FcmServiceImpl(this.fcmTokenService) {
+  FcmServiceImpl(this.fcmTokenService, this.fcmInitialMessageHandled) {
     // Listen to incoming messages.
     _fcmOnMessageOpenedAppSubscription =
         FirebaseMessaging.onMessageOpenedApp.listen((message) {
@@ -28,9 +30,11 @@ class FcmServiceImpl extends FcmService {
       _fcmEventStreamController.add(FcmEvent(message.data));
     });
 
+    // Store FCM token on firestore.
     FirebaseMessaging.instance.getToken().then(_storeFcmToken);
     _fcmOnTokenRefreshSubscription =
         FirebaseMessaging.instance.onTokenRefresh.listen(_storeFcmToken);
+
     _initializeLocalNotifications();
   }
 
@@ -48,11 +52,13 @@ class FcmServiceImpl extends FcmService {
 
   @override
   void handleInitialMessage() async {
+    if (fcmInitialMessageHandled.state) return;
     Log.d("Handling initial FCM message.");
     final initialMessage = await FirebaseMessaging.instance.getInitialMessage();
     if (initialMessage != null) {
       _fcmEventStreamController.add(FcmEvent(initialMessage.data));
     }
+    fcmInitialMessageHandled.state = true;
   }
 
   void _storeFcmToken(String? token) {
