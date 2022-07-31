@@ -109,3 +109,4 @@ Note: If the logs are crowded with unnecessary logs, apply following filter (VS 
   Config (https://pub.dev/packages/flutter_local_notifications#release-build-configuration)
 - [ ] Guide on replacing texts and creating new project
 - [ ] iOS Configurations
+- [ ] Force update

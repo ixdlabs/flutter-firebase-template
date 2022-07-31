@@ -10,7 +10,7 @@ final countServiceProvider = Provider.autoDispose<CountService?>((ref) {
   return CountServiceImpl(currentUser: currentUser);
 }, name: "count_service_provider");
 
-final countNumberProvider = StreamProvider.autoDispose<Count?>((ref) {
+final myCountProvider = StreamProvider.autoDispose<Count?>((ref) {
   final countService = ref.watch(countServiceProvider);
   if (countService == null) return const Stream.empty();
   return countService.getMyCount();

@@ -73,9 +73,9 @@ class CountWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final countNumber = ref.watch(countNumberProvider);
+    final myCount = ref.watch(myCountProvider);
 
-    return countNumber.when(
+    return myCount.when(
       data: (count) => Column(
         children: [
           Text("My count: ${count?.count ?? 0}",

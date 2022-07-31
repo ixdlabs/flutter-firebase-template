@@ -7,10 +7,5 @@ final fcmTokenServiceProvider = Provider<FcmTokenService?>((ref) {
   final currentUser = ref.watch(authCurrentUserProvider);
   if (currentUser == null) return null;
 
-  final fcmTokenService = FcmTokenServiceImpl(currentUser: currentUser);
-  fcmTokenService.startTokenSync();
-  // If the provider is disposed, we call fcm token service dispose,
-  // which stops listening to token updates.
-  ref.onDispose(() => fcmTokenService.stopTokenSync());
-  return fcmTokenService;
+  return FcmTokenServiceImpl(currentUser: currentUser);
 }, name: "fcm_token_service_provider");
