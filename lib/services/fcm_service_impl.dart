@@ -147,7 +147,7 @@ class FcmServiceImpl extends FcmService {
         ),
       );
       _localNotificationPlugin.show(id, title, body, notificationDetails,
-          payload: data != null ? json.encode(data) : null);
+          payload: json.encode(data ?? {}));
     } catch (e, st) {
       Log.e('Error sending self notification', e, st);
     }

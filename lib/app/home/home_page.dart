@@ -37,8 +37,9 @@ class HomePage extends HookConsumerWidget {
         title: const Text("Home Page"),
         actions: [
           IconButton(
+            tooltip: "Crash Me",
             onPressed: () => FirebaseCrashlytics.instance.crash(),
-            icon: const Icon(Icons.bug_report),
+            icon: const Icon(Icons.error),
           ),
         ],
       ),
@@ -56,8 +57,12 @@ class HomePage extends HookConsumerWidget {
             ElevatedButton(
               child: const Text("Send myself a Notification"),
               onPressed: () {
-                ref.read(fcmServiceProvider).sendSelfNotification(0,
-                    title: "Hello World", body: "This is a test notification");
+                ref.read(fcmServiceProvider).sendSelfNotification(
+                  0,
+                  title: "Hello World",
+                  body: "This is a test notification",
+                  data: {"test": "test"},
+                );
               },
             ),
           ],
