@@ -1,8 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase_template/constants.dart';
 import 'package:flutter_firebase_template/firebase_options.dart';
 import 'package:flutter_firebase_template/logger/logger.dart';
 import 'package:flutter_firebase_template/logger/observers.dart';
@@ -23,6 +26,13 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   Log.i("Firebase app initialized.");
+  // If variable is set, enable firebase emulators.
+  if (DebugConstants.enableEmulators) {
+    await FirebaseAuth.instance.useAuthEmulator('10.0.2.2', 9099);
+    FirebaseFirestore.instance.useFirestoreEmulator('10.0.2.2', 8080);
+    Log.w("Running in emulator mode. Connected to emulators at 10.0.2.2.");
+  }
+
   // Crashlytics
   await FirebaseCrashlytics.instance
       .setCrashlyticsCollectionEnabled(kReleaseMode);

@@ -20,11 +20,6 @@ fvm flutter run
 3. Crashlytics https://firebase.flutter.dev/docs/crashlytics/usage
 4. Cloud Messaging https://firebase.flutter.dev/docs/messaging/usage
 
-> Emulator Setup:
->
-> - https://firebase.flutter.dev/docs/auth/start/#optional-prototype-and-test-with-firebase-local-emulator-suite
-> - https://firebase.flutter.dev/docs/firestore/usage/#emulator-usage
-
 ### Flutter setup
 
 1. Enable firebase services.
@@ -39,6 +34,15 @@ fvm flutter run
 8. Send a self notification to make sure local notifications integration works.
 9. Send a test notification via the dashboard (The FCM registration token will be logged in to the console) and check if
    it arrives (Both when app is in foreground/background). Tapping it should show a success message.
+
+### Firebase Local Setup/Use Emulators
+
+1. Run `firebase init` in firebase project directory and enable services and emulators.
+2.  You can deploy firebase project via `firebase deploy`. Use `firebase deploy --only firestore` to deploy firestore rules only.
+3. Start emulators by `firebase emulators:start`.
+4. In the app, set `DebugConstants.enableEmulators` to `true`.
+5. Run the app in a android emulator in the same device as firebase emulators.
+6. Now app should connect to firebase emulator.
 
 ## Design Choices
 
@@ -101,7 +105,6 @@ Note: If the logs are crowded with unnecessary logs, apply following filter (VS 
 
 ## Future Work
 
-- [ ] Guide on using Firebase emulator
 - [ ] Local Notifications Release
   Config (https://pub.dev/packages/flutter_local_notifications#release-build-configuration)
 - [ ] Guide on replacing texts and creating new project
