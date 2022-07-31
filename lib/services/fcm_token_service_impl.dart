@@ -3,14 +3,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_firebase_template/logger/logger.dart';
 import 'package:flutter_firebase_template/models/fcm_token.dart';
 import 'package:flutter_firebase_template/services/fcm_token_service.dart';
+import 'package:flutter_firebase_template/services/firestore_service.dart';
 
-class FcmTokenServiceImpl extends FcmTokenService {
+class FcmTokenServiceImpl extends FcmTokenService
+    with FirestoreService<FcmToken> {
   final User currentUser;
 
-  FcmTokenServiceImpl({
-    required super.collectionRef,
-    required this.currentUser,
-  });
+  FcmTokenServiceImpl({required this.currentUser});
 
   @override
   Future<void> storeToken(String token) async {

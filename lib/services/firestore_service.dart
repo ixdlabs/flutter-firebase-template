@@ -8,9 +8,10 @@ typedef QueryBuilder<T> = Query<Map<String, dynamic>> Function(
 typedef DocDataEvaluator = bool Function(Map<String, dynamic> data);
 
 abstract class FirestoreService<T> {
-  final CollectionReference<Map<String, dynamic>> collectionRef;
+  String get collectionName;
 
-  FirestoreService({required this.collectionRef});
+  CollectionReference<Map<String, dynamic>> get collectionRef =>
+      FirebaseFirestore.instance.collection(collectionName);
 
   /// Returns a stream of a collection in firestore.
   /// The stream will emit for each document in the collection.

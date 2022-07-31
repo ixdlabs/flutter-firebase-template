@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_firebase_template/providers/auth_provider.dart';
 import 'package:flutter_firebase_template/services/fcm_service.dart';
 import 'package:flutter_firebase_template/services/fcm_service_impl.dart';
@@ -11,10 +10,8 @@ final fcmInitialMessageHandledProvider = StateProvider<bool>((ref) => false);
 final fcmTokenServiceProvider = Provider<FcmTokenService?>((ref) {
   final currentUser = ref.watch(authCurrentUserProvider);
   if (currentUser == null) return null;
-  return FcmTokenServiceImpl(
-    collectionRef: FirebaseFirestore.instance.collection("fcmTokens"),
-    currentUser: currentUser,
-  );
+
+  return FcmTokenServiceImpl(currentUser: currentUser);
 });
 
 final fcmServiceProvider = Provider<FcmService>((ref) {

@@ -1,8 +1,7 @@
-import 'package:flutter_firebase_template/models/fcm_token.dart';
-import 'package:flutter_firebase_template/services/firestore_service.dart';
+import 'package:flutter_firebase_template/constants.dart';
 
-abstract class FcmTokenService extends FirestoreService<FcmToken> {
-  FcmTokenService({required super.collectionRef});
-
+abstract class FcmTokenService {
   Future<void> storeToken(String token);
+
+  String get collectionName => CollectionNames.fcmTokens;
 }
