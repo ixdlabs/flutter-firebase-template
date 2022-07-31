@@ -9,10 +9,5 @@ final fcmServiceProvider = Provider<FcmService>((ref) {
   final fcmInitialMessageHandled =
       ref.watch(fcmInitialMessageHandledProvider.notifier);
 
-  final fcmService = FcmServiceImpl(fcmInitialMessageHandled);
-  fcmService.startListeningToMessages();
-  // If the provider is disposed, we call fcm service dispose,
-  // which stops listening to notifications.
-  ref.onDispose(() => fcmService.dispose());
-  return fcmService;
+  return FcmServiceImpl(fcmInitialMessageHandled);
 }, name: "fcm_service_provider");

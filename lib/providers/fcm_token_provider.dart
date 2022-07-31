@@ -11,6 +11,6 @@ final fcmTokenServiceProvider = Provider<FcmTokenService?>((ref) {
   fcmTokenService.startTokenSync();
   // If the provider is disposed, we call fcm token service dispose,
   // which stops listening to token updates.
-  ref.onDispose(() => fcmTokenService.dispose());
+  ref.onDispose(() => fcmTokenService.stopTokenSync());
   return fcmTokenService;
 }, name: "fcm_token_service_provider");

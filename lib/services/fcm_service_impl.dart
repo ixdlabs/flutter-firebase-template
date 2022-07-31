@@ -133,7 +133,7 @@ class FcmServiceImpl extends FcmService {
   }
 
   @override
-  void dispose() {
+  void stopListeningToMessages() {
     Log.d("FCM service disposed.");
     _fcmOnMessageOpenedAppSubscription?.cancel();
     _fcmOnMessageSubscription?.cancel();

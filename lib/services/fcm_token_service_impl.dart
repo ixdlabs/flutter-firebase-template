@@ -45,7 +45,7 @@ class FcmTokenServiceImpl extends FcmTokenService
   }
 
   @override
-  void dispose() {
+  void stopTokenSync() {
     _fcmOnTokenRefreshSubscription?.cancel();
   }
 }

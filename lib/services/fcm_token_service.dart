@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_firebase_template/constants.dart';
 
 abstract class FcmTokenService {
@@ -9,7 +10,12 @@ abstract class FcmTokenService {
   Future<void> storeToken(String? token);
 
   /// Dispose any resources/connections used by the service.
-  void dispose();
+  void stopTokenSync();
+
+  VoidCallback tokenSync() {
+    startTokenSync();
+    return () => stopTokenSync();
+  }
 
   String get collectionName => CollectionNames.fcmTokens;
 }

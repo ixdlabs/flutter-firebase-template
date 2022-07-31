@@ -26,5 +26,10 @@ abstract class FcmService {
       {String? title, String? body, Map<String, dynamic>? data});
 
   /// Dispose any resources/connections used by the service.
-  void dispose();
+  void stopListeningToMessages();
+
+  VoidCallback listenToMessages() {
+    startListeningToMessages();
+    return () => stopListeningToMessages();
+  }
 }

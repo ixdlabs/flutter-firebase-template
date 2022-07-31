@@ -66,11 +66,13 @@ class MainApp extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final appRouter = useMemoized(() => MainAppRouter(), []);
 
-    // Eager initialization of global services.
-    // If there are services are must be initialized at startup, put them here.
-    // More Info: https://github.com/rrousselGit/riverpod/issues/202
-    ref.watch(fcmServiceProvider);
-    ref.watch(fcmTokenServiceProvider);
+    // These services will be reset when service changes.
+    // Note: We cannot move the startup logic to providers since
+    // they may not get initialized if there are no listeners.
+    final fcmService = ref.watch(fcmServiceProvider);
+    final fcmTokenService = ref.watch(fcmTokenServiceProvider);
+    useEffect(() => fcmService.listenToMessages, [fcmService]);
+    useEffect(() => fcmTokenService?.tokenSync, [fcmTokenService]);
 
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
