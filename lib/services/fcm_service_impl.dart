@@ -31,6 +31,7 @@ class FcmServiceImpl extends FcmService {
     });
 
     // Store FCM token on firestore.
+    // The first token as well as updates are stored in the same collection.
     FirebaseMessaging.instance.getToken().then(_storeFcmToken);
     _fcmOnTokenRefreshSubscription =
         FirebaseMessaging.instance.onTokenRefresh.listen(_storeFcmToken);
@@ -52,6 +53,9 @@ class FcmServiceImpl extends FcmService {
 
   @override
   void handleInitialMessage() async {
+    // If the app is opened from a notification, we handle it here.
+    // To make sure that we only handle it once, we check if the flag is set.
+
     if (fcmInitialMessageHandled.state) return;
     Log.d("Handling initial FCM message.");
     final initialMessage = await FirebaseMessaging.instance.getInitialMessage();
@@ -84,6 +88,9 @@ class FcmServiceImpl extends FcmService {
     );
     await _localNotificationPlugin.initialize(initializationSettings,
         onSelectNotification: (payload) {
+      // User tapped on the local notification.
+      // So wel simply decode the json data and process is the same as FCM.
+
       Log.i("Local notification selected: $payload");
       try {
         if (payload == null) return;
@@ -98,36 +105,37 @@ class FcmServiceImpl extends FcmService {
   }
 
   void _connectFcmToLocalNotifications() {
-    assert(
-        _fcmOnMessageSubscription == null, "FCM subscription already exists");
+    assert(_fcmOnMessageSubscription == null, "Subscription already exists");
 
     _fcmOnMessageSubscription = FirebaseMessaging.onMessage.listen((message) {
+      // If we get a message while the app is in the foreground,
+      // we need to show a notification explicitly.
+      // The reason is FCM will not show notifications for foreground apps.
+      // For this, we pass the notification to the LocalNotificationsPlugin.
+      // If `onMessage` is triggered with a notification, construct our own
+      // local notification to show to users using the created channel.
+
       Log.i("FCM message received: $message");
       final notification = message.notification;
 
-      // If `onMessage` is triggered with a notification, construct our own
-      // local notification to show to users using the created channel.
-      // We dont send a local notification if the notification is for new messages.
       if (notification != null) {
-        _localNotificationPlugin.show(
+        sendSelfNotification(
           notification.hashCode,
-          notification.title,
-          notification.body,
-          NotificationDetails(
-            android: AndroidNotificationDetails(
-              _localChannel.id,
-              _localChannel.name,
-              icon: "@mipmap/ic_launcher",
-            ),
-          ),
-          payload: json.encode(message.data),
+          title: notification.title,
+          body: notification.body,
+          data: message.data,
         );
       }
     });
   }
 
   @override
-  void sendSelfNotification(String title, String body) async {
+  void sendSelfNotification(
+    int id, {
+    String? title,
+    String? body,
+    Map<String, dynamic>? data,
+  }) async {
     try {
       Log.i("Sending self notification: $title, $body");
 
@@ -135,12 +143,11 @@ class FcmServiceImpl extends FcmService {
         android: AndroidNotificationDetails(
           _localChannel.id,
           _localChannel.name,
-          importance: _localChannel.importance,
+          icon: "@mipmap/ic_launcher",
         ),
-        iOS: const IOSNotificationDetails(),
       );
-      await _localNotificationPlugin.show(0, title, body, notificationDetails,
-          payload: '{}');
+      _localNotificationPlugin.show(id, title, body, notificationDetails,
+          payload: data != null ? json.encode(data) : null);
     } catch (e, st) {
       Log.e('Error sending self notification', e, st);
     }

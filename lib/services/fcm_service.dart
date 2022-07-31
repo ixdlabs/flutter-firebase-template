@@ -13,7 +13,12 @@ abstract class FcmService {
 
   Stream<FcmEvent> get fcmEventStream;
 
-  void sendSelfNotification(String title, String body);
+  void sendSelfNotification(
+    int id, {
+    String? title,
+    String? body,
+    Map<String, dynamic>? data,
+  });
 
   /// Dispose any resources/connections used by the service.
   void dispose();

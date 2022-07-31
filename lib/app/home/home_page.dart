@@ -56,8 +56,8 @@ class HomePage extends HookConsumerWidget {
             ElevatedButton(
               child: const Text("Send myself a Notification"),
               onPressed: () {
-                ref.read(fcmServiceProvider).sendSelfNotification(
-                    "Hello World", "This is a test notification");
+                ref.read(fcmServiceProvider).sendSelfNotification(0,
+                    title: "Hello World", body: "This is a test notification");
               },
             ),
           ],
