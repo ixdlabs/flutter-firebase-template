@@ -1,6 +1,6 @@
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter_firebase_template/constants.dart';
-import 'package:flutter_firebase_template/utils/version_utils.dart';
+import 'package:flutter_firebase_template/extensions/version_utils.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 

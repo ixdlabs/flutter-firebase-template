@@ -1,11 +1,11 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase_template/extensions/messenger_utils.dart';
 import 'package:flutter_firebase_template/logger/logger.dart';
 import 'package:flutter_firebase_template/providers/count_provider.dart';
 import 'package:flutter_firebase_template/providers/fcm_provider.dart';
 import 'package:flutter_firebase_template/router/router.gr.dart';
-import 'package:flutter_firebase_template/utils/messenger/messenger.dart';
 import 'package:flutter_firebase_template/widgets/default_scaffold.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -20,7 +20,7 @@ class HomePage extends HookConsumerWidget {
     useEffect(() {
       return ref.read(fcmServiceProvider).subscribe((event) {
         Log.i("FCM event: $event");
-        Messenger.of(context).showSuccess("FCM event: $event");
+        context.messenger.showSuccess("FCM event: $event");
       });
     }, [ref, BuildContext]);
 

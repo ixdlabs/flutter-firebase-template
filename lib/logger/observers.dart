@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_firebase_template/logger/logger.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+/// An observer for [ProviderScope] that logs events happening for providers.
 class MainAppProviderObserver extends ProviderObserver {
   String getName(ProviderBase provider) {
     return provider.name ?? provider.runtimeType.toString();
@@ -27,6 +28,7 @@ class MainAppProviderObserver extends ProviderObserver {
   }
 }
 
+/// An observer for [AutoRouter] that logs push events.
 class MainAppNavigationObserver extends AutoRouterObserver {
   @override
   void didPush(Route route, Route? previousRoute) {

@@ -1,16 +1,14 @@
 import "package:flutter/material.dart";
-import 'package:flutter_firebase_template/utils/messenger/messenger_impl.dart';
 
+/// The base interface for a messenger that can show errors/messages.
 abstract class Messenger {
   final BuildContext context;
 
   Messenger(this.context);
 
+  /// Shows an error message.
   void showError(String message);
 
+  /// Shows a success message.
   void showSuccess(String message);
-
-  static Messenger of(BuildContext context) {
-    return SnackBarMessenger(context);
-  }
 }

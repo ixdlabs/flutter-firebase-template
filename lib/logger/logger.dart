@@ -2,6 +2,8 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:logger/logger.dart';
 
+/// A singleton logger class.
+/// Errors logs will be sent to crashlytics.
 class Log {
   static late Logger _logger;
 
