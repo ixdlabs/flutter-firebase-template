@@ -43,8 +43,11 @@ dependencies:
   firebase_auth: ^3.6.1
   firebase_crashlytics: ^2.8.6
   firebase_messaging: ^12.0.1
+  firebase_remote_config: ^2.0.13
+  firebase_analytics: ^9.3.0
   flutterfire_ui: ^0.4.3+3
   flutter_local_notifications: ^9.7.0
+  package_info_plus: ^1.4.3
 
 dev_dependencies:
   flutter_test:

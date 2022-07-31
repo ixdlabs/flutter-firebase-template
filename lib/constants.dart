@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
 
-class DebugConstants {
+abstract class DebugConstants {
   static const bool enableEmulators = false;
+  static const String emulatorHost = "10.0.2.2";
+  static const int emulatorAuthPort = 9099;
+  static const int emulatorFirestorePort = 8080;
 }
 
-class ColorConstants {
+abstract class ColorConstants {
   static const MaterialColor kPrimarySwatch = Colors.blue;
 }
 
-class CollectionNames {
-  static const fcmTokens = "fcmTokens";
-  static const counts = "counts";
+abstract class CollectionNames {
+  static const String fcmTokens = "fcmTokens";
+  static const String counts = "counts";
+}
+
+abstract class RemoteConfigKeys {
+  static const String minimumAppVersion = "minimumAppVersion";
 }
