@@ -1,3 +1,7 @@
+import 'package:flutter/widgets.dart';
+
+typedef FcmEventHandler = void Function(FcmEvent event);
+
 class FcmEvent {
   final Map<String, dynamic> data;
 
@@ -8,17 +12,18 @@ class FcmEvent {
 }
 
 abstract class FcmService {
-  /// Handle the notification if the app was opened by a push notification.
-  void handleInitialMessage();
+  /// Start listening for incoming messages.
+  void startListeningToMessages();
 
-  Stream<FcmEvent> get fcmEventStream;
+  /// Subscribes to FCM events.
+  /// The events will be handled by the provided [handler].
+  /// This will return the dispose callback for the [handler].
+  VoidCallback subscribe(FcmEventHandler handler);
 
-  void sendSelfNotification(
-    int id, {
-    String? title,
-    String? body,
-    Map<String, dynamic>? data,
-  });
+  /// Sends a notification to self.
+  /// Once tapped, this will be handled by the [handler]s provided in [subscribe].
+  void showLocalNotification(int id,
+      {String? title, String? body, Map<String, dynamic>? data});
 
   /// Dispose any resources/connections used by the service.
   void dispose();

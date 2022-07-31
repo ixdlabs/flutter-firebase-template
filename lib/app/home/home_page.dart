@@ -15,22 +15,14 @@ class HomePage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final messenger = Messenger.of(context);
-    // Handles events from fCM service.
-    // This logic lies here because we want FCM events to be handled only after logging in.
+    // Following will attach a listener to the FCM service.
+    // When a message is received, the listener will call this closure.
     useEffect(() {
-      return ref.read(fcmServiceProvider).fcmEventStream.listen((event) {
+      return ref.read(fcmServiceProvider).subscribe((event) {
         Log.i("FCM event: $event");
-        messenger.showSuccess("FCM event: $event");
-      }).cancel;
-    }, [ref, messenger]);
-    // Handles initial message.
-    // This will be run only once but should come after listening to fCM events.
-    // Otherwise, the message will not be handled by the listeners.
-    useEffect(() {
-      ref.read(fcmServiceProvider).handleInitialMessage();
-      return null;
-    }, []);
+        Messenger.of(context).showSuccess("FCM event: $event");
+      });
+    }, [ref, BuildContext]);
 
     return DefaultScaffold(
       appBar: AppBar(
@@ -57,7 +49,7 @@ class HomePage extends HookConsumerWidget {
             ElevatedButton(
               child: const Text("Send myself a Notification"),
               onPressed: () {
-                ref.read(fcmServiceProvider).sendSelfNotification(
+                ref.read(fcmServiceProvider).showLocalNotification(
                   0,
                   title: "Hello World",
                   body: "This is a test notification",

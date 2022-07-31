@@ -10,5 +10,5 @@ final authStateChangesProvider = StreamProvider<User?>(
     name: "auth_state_changes_provider");
 
 final authCurrentUserProvider = Provider<User?>(
-    (ref) => ref.watch(authStateChangesProvider).value,
+    (ref) => ref.watch(authStateChangesProvider).valueOrNull,
     name: "auth_current_user_provider");

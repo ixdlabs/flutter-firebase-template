@@ -9,6 +9,12 @@ class MainAppProviderObserver extends ProviderObserver {
   }
 
   @override
+  void didAddProvider(
+      ProviderBase provider, Object? value, ProviderContainer container) {
+    Log.d('Provider added: ${getName(provider)}');
+  }
+
+  @override
   void didUpdateProvider(ProviderBase provider, Object? previousValue,
       Object? newValue, ProviderContainer container) {
     Log.d("[${getName(provider)}] updated to $newValue");

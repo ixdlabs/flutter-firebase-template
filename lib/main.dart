@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_firebase_template/firebase_options.dart';
 import 'package:flutter_firebase_template/logger/logger.dart';
 import 'package:flutter_firebase_template/logger/observers.dart';
+import 'package:flutter_firebase_template/providers/fcm_provider.dart';
+import 'package:flutter_firebase_template/providers/fcm_token_provider.dart';
 import 'package:flutter_firebase_template/router/router.gr.dart';
 import 'package:flutter_firebase_template/theme.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -53,6 +55,12 @@ class MainApp extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final appRouter = useMemoized(() => MainAppRouter(), []);
+
+    // Eager initialization of global services.
+    // If there are services are must be initialized at startup, put them here.
+    // More Info: https://github.com/rrousselGit/riverpod/issues/202
+    ref.watch(fcmServiceProvider);
+    ref.watch(fcmTokenServiceProvider);
 
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,

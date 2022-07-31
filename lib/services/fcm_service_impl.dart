@@ -2,14 +2,13 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_firebase_template/logger/logger.dart';
 import 'package:flutter_firebase_template/services/fcm_service.dart';
-import 'package:flutter_firebase_template/services/fcm_token_service.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class FcmServiceImpl extends FcmService {
-  final FcmTokenService? fcmTokenService;
   final StateController<bool> fcmInitialMessageHandled;
 
   final _localChannel = const AndroidNotificationChannel(
@@ -20,54 +19,20 @@ class FcmServiceImpl extends FcmService {
 
   StreamSubscription? _fcmOnMessageOpenedAppSubscription;
   StreamSubscription? _fcmOnMessageSubscription;
-  StreamSubscription? _fcmOnTokenRefreshSubscription;
 
-  FcmServiceImpl(this.fcmTokenService, this.fcmInitialMessageHandled) {
-    // Listen to incoming messages.
+  FcmServiceImpl(this.fcmInitialMessageHandled);
+
+  @override
+  void startListeningToMessages() {
+    assert(_fcmOnMessageOpenedAppSubscription == null,
+        "Subscription already exists");
+
     _fcmOnMessageOpenedAppSubscription =
         FirebaseMessaging.onMessageOpenedApp.listen((message) {
       Log.i("FCM message opened app: $message");
       _fcmEventStreamController.add(FcmEvent(message.data));
     });
-
-    // Store FCM token on firestore.
-    // The first token as well as updates are stored in the same collection.
-    FirebaseMessaging.instance.getToken().then(_storeFcmToken);
-    _fcmOnTokenRefreshSubscription =
-        FirebaseMessaging.instance.onTokenRefresh.listen(_storeFcmToken);
-
     _initializeLocalNotifications();
-  }
-
-  @override
-  void dispose() {
-    Log.d("FCM service disposed.");
-    _fcmOnMessageOpenedAppSubscription?.cancel();
-    _fcmOnTokenRefreshSubscription?.cancel();
-    _fcmOnMessageSubscription?.cancel();
-    _fcmEventStreamController.close();
-  }
-
-  @override
-  Stream<FcmEvent> get fcmEventStream => _fcmEventStreamController.stream;
-
-  @override
-  void handleInitialMessage() async {
-    // If the app is opened from a notification, we handle it here.
-    // To make sure that we only handle it once, we check if the flag is set.
-
-    if (fcmInitialMessageHandled.state) return;
-    Log.d("Handling initial FCM message.");
-    final initialMessage = await FirebaseMessaging.instance.getInitialMessage();
-    if (initialMessage != null) {
-      _fcmEventStreamController.add(FcmEvent(initialMessage.data));
-    }
-    fcmInitialMessageHandled.state = true;
-  }
-
-  void _storeFcmToken(String? token) {
-    if (token == null) return;
-    fcmTokenService?.storeToken(token);
   }
 
   /// Initialize Local Notifications.
@@ -104,22 +69,21 @@ class FcmServiceImpl extends FcmService {
     _connectFcmToLocalNotifications();
   }
 
+  /// If we get a message while the app is in the foreground,
+  /// we need to show a notification explicitly.
+  /// The reason is FCM will not show notifications for foreground apps.
+  /// For this, we pass the notification to the LocalNotificationsPlugin.
+  /// If `onMessage` is triggered with a notification, construct our own
+  /// local notification to show to users using the created channel.
   void _connectFcmToLocalNotifications() {
     assert(_fcmOnMessageSubscription == null, "Subscription already exists");
 
     _fcmOnMessageSubscription = FirebaseMessaging.onMessage.listen((message) {
-      // If we get a message while the app is in the foreground,
-      // we need to show a notification explicitly.
-      // The reason is FCM will not show notifications for foreground apps.
-      // For this, we pass the notification to the LocalNotificationsPlugin.
-      // If `onMessage` is triggered with a notification, construct our own
-      // local notification to show to users using the created channel.
-
       Log.i("FCM message received: $message");
       final notification = message.notification;
 
       if (notification != null) {
-        sendSelfNotification(
+        showLocalNotification(
           notification.hashCode,
           title: notification.title,
           body: notification.body,
@@ -130,12 +94,27 @@ class FcmServiceImpl extends FcmService {
   }
 
   @override
-  void sendSelfNotification(
-    int id, {
-    String? title,
-    String? body,
-    Map<String, dynamic>? data,
-  }) async {
+  VoidCallback subscribe(FcmEventHandler handler) {
+    final subscription = _fcmEventStreamController.stream.listen(handler);
+    _handleInitialMessage();
+    return subscription.cancel;
+  }
+
+  /// If the app is opened from a notification, we handle it here.
+  /// To make sure that we only handle it once, we check if the flag is set.
+  void _handleInitialMessage() async {
+    if (fcmInitialMessageHandled.state) return;
+    Log.d("Handling initial FCM message.");
+    final initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+    if (initialMessage != null) {
+      _fcmEventStreamController.add(FcmEvent(initialMessage.data));
+    }
+    fcmInitialMessageHandled.state = true;
+  }
+
+  @override
+  void showLocalNotification(int id,
+      {String? title, String? body, Map<String, dynamic>? data}) async {
     try {
       Log.i("Sending self notification: $title, $body");
 
@@ -151,5 +130,13 @@ class FcmServiceImpl extends FcmService {
     } catch (e, st) {
       Log.e('Error sending self notification', e, st);
     }
+  }
+
+  @override
+  void dispose() {
+    Log.d("FCM service disposed.");
+    _fcmOnMessageOpenedAppSubscription?.cancel();
+    _fcmOnMessageSubscription?.cancel();
+    _fcmEventStreamController.close();
   }
 }
