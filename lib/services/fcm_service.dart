@@ -28,6 +28,8 @@ abstract class FcmService {
   /// Dispose any resources/connections used by the service.
   void stopListeningToMessages();
 
+  /// Starts listening to FCM messages and
+  /// returns a callback to stop the listening.
   VoidCallback listenToMessages() {
     startListeningToMessages();
     return () => stopListeningToMessages();

@@ -12,6 +12,8 @@ abstract class FcmTokenService {
   /// Dispose any resources/connections used by the service.
   void stopTokenSync();
 
+  /// Starts syncing tokens with cloud and
+  /// returns a callback to stop the syncing.
   VoidCallback tokenSync() {
     startTokenSync();
     return () => stopTokenSync();

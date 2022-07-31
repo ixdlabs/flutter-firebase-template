@@ -85,8 +85,8 @@ class MainApp extends HookConsumerWidget {
     // they may not get initialized if there are no listeners.
     final fcmService = ref.watch(fcmServiceProvider);
     final fcmTokenService = ref.watch(fcmTokenServiceProvider);
-    useEffect(() => fcmService.listenToMessages, [fcmService]);
-    useEffect(() => fcmTokenService?.tokenSync, [fcmTokenService]);
+    useEffect(() => fcmService.listenToMessages(), [fcmService]);
+    useEffect(() => fcmTokenService?.tokenSync(), [fcmTokenService]);
 
     // Show the force update dialog if the app is updated.
     final forceUpdate = ref.watch(forceUpdateProvider);
