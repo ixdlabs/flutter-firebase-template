@@ -7,5 +7,5 @@ final fcmTokenServiceProvider = Provider<FcmTokenService?>((ref) {
   final currentUser = ref.watch(authCurrentUserProvider);
   if (currentUser == null) return null;
 
-  return FcmTokenServiceImpl(currentUser: currentUser);
+  return FirestoreFcmTokenService(currentUser: currentUser);
 }, name: "fcm_token_service_provider");

@@ -9,5 +9,5 @@ final fcmServiceProvider = Provider<FcmService>((ref) {
   final fcmInitialMessageHandled =
       ref.watch(fcmInitialMessageHandledProvider.notifier);
 
-  return FcmServiceImpl(fcmInitialMessageHandled);
+  return FirebaseFcmService(fcmInitialMessageHandled);
 }, name: "fcm_service_provider");

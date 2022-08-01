@@ -11,4 +11,9 @@ class FirebaseRemoteConfigService implements RemoteConfigService {
     await _remoteConfig.fetchAndActivate();
     return _remoteConfig.getString(RemoteConfigKeys.minimumAppVersion);
   }
+
+  @override
+  String toString() {
+    return "FirebaseRemoteConfigService()";
+  }
 }

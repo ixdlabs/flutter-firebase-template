@@ -7,7 +7,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 final countServiceProvider = Provider.autoDispose<CountService?>((ref) {
   final currentUser = ref.watch(authCurrentUserProvider);
   if (currentUser == null) return null;
-  return CountServiceImpl(currentUser: currentUser);
+  return FirestoreCountService(currentUser: currentUser);
 }, name: "count_service_provider");
 
 final myCountProvider = StreamProvider.autoDispose<Count?>((ref) {

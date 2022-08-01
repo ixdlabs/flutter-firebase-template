@@ -8,7 +8,7 @@ import 'package:flutter_firebase_template/services/fcm_service.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class FcmServiceImpl extends FcmService {
+class FirebaseFcmService extends FcmService {
   final StateController<bool> fcmInitialMessageHandled;
 
   final _localChannel = const AndroidNotificationChannel(
@@ -20,7 +20,7 @@ class FcmServiceImpl extends FcmService {
   StreamSubscription? _fcmOnMessageOpenedAppSubscription;
   StreamSubscription? _fcmOnMessageSubscription;
 
-  FcmServiceImpl(this.fcmInitialMessageHandled);
+  FirebaseFcmService(this.fcmInitialMessageHandled);
 
   @override
   void startListeningToMessages() {
@@ -138,5 +138,10 @@ class FcmServiceImpl extends FcmService {
     _fcmOnMessageOpenedAppSubscription?.cancel();
     _fcmOnMessageSubscription?.cancel();
     _fcmEventStreamController.close();
+  }
+
+  @override
+  String toString() {
+    return "FirebaseFcmService()";
   }
 }
