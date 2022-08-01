@@ -28,7 +28,7 @@ fvm flutter run
    Default `com.example.flutter_firebase_template`)
 3. In iOS, change the bundle id to your application id. (Default `com.example.flutterFirebaseTemplate`)
 4. Remove firebase files from `.gitignore`.
-5. Install [`flutterfire`](https://firebase.flutter.dev/docs/overview/#using-the-flutterfire-cli).
+5. Install [`flutterfire`](https://firebase.flutter.dev/docs/overview/#using-the-flutterfire-cli). (Tested with version `0.2.4`)
 6. Use `flutterfire configure` to configure the project. (Run this again if you change the application id/add new
    services)
 7. Crash app using top right button and use dashboard to make sure crashlytics integration works.
