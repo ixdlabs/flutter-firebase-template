@@ -29,19 +29,32 @@ class FcmTokenServiceImpl extends FcmTokenService
     Log.i("Storing FCM token: $token");
     if (token == null) return;
     try {
-      await createOrUpdate(currentUser.uid, createData: {
-        'tokens': [token],
-        'lastUpdated': FieldValue.serverTimestamp(),
-      }, updateData: {
-        'tokens': FieldValue.arrayUnion([token]),
-        'lastUpdated': FieldValue.serverTimestamp(),
-      }, skipUpdate: (data) {
-        // Don't update if the token is already in the list.
-        return FcmToken.fromJson(data).tokens.contains(token);
-      });
+      await createOrUpdate(
+        currentUser.uid,
+        updateData: (currentData) => _updateFcmToken(currentData, token),
+        createData: () => {
+          'tokens': [token],
+          'lastUpdated': FieldValue.serverTimestamp(),
+        },
+      );
     } catch (e, st) {
       Log.e("Error saving token", e, st);
     }
+  }
+
+  Map<String, dynamic>? _updateFcmToken(
+      Map<String, dynamic>? currentData, String token) {
+    // Don't update if the token is already in the list.
+    if (currentData != null) {
+      final fcmToken = FcmToken.fromJson(currentData);
+      if (fcmToken.tokens.contains(token)) {
+        return null;
+      }
+    }
+    return {
+      'tokens': FieldValue.arrayUnion([token]),
+      'lastUpdated': FieldValue.serverTimestamp(),
+    };
   }
 
   @override

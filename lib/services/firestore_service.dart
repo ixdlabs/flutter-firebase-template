@@ -5,7 +5,11 @@ typedef DocumentWithIdBuilder<T> = T Function(
     Map<String, dynamic> data, String docId);
 typedef QueryBuilder<T> = Query<Map<String, dynamic>> Function(
     Query<Map<String, dynamic>> query);
+
 typedef DocDataEvaluator = bool Function(Map<String, dynamic> data);
+typedef DocDataCreate = Map<String, dynamic>? Function();
+typedef DocDataUpdate = Map<String, dynamic>? Function(
+    Map<String, dynamic>? currentData);
 
 abstract class FirestoreService<T> {
   String get collectionName;
@@ -59,20 +63,18 @@ abstract class FirestoreService<T> {
 
   Future<void> createOrUpdate(
     String docId, {
-    required Map<String, dynamic> createData,
-    required Map<String, dynamic> updateData,
-    DocDataEvaluator? skipUpdate,
+    required DocDataCreate createData,
+    required DocDataUpdate updateData,
   }) async {
-    assert(createData != updateData,
-        "Both createData and updateData are be the same. Use document.set instead.");
     final docRef = collectionRef.doc(docId);
     final doc = await docRef.get();
     if (doc.exists) {
       final docData = doc.data();
-      if (docData != null && skipUpdate != null && skipUpdate(docData)) return;
-      await docRef.update(updateData);
+      final updatedData = updateData(docData);
+      if (updatedData != null) await docRef.update(updatedData);
     } else {
-      await docRef.set(createData);
+      final createdData = createData();
+      if (createdData != null) await docRef.set(createdData);
     }
   }
 }

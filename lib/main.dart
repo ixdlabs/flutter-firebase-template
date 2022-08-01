@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -91,7 +92,10 @@ class MainApp extends HookConsumerWidget {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       routerDelegate: appRouter.delegate(
-        navigatorObservers: () => [MainAppNavigationObserver()],
+        navigatorObservers: () => [
+          MainAppNavigationObserver(),
+          FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance),
+        ],
       ),
       routeInformationParser: appRouter.defaultRouteParser(),
       theme: MainAppTheme().build(),

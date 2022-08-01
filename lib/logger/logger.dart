@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:logger/logger.dart';
@@ -38,6 +39,12 @@ class Log {
 
   static void wtf(dynamic message, [dynamic error, StackTrace? stackTrace]) {
     _logger.wtf(message, error, stackTrace);
+  }
+
+  static void a(String name, [Map<String, Object?>? parameters]) async {
+    _logger.i("Analytics [$name] Parameters:  $parameters");
+    await FirebaseAnalytics.instance
+        .logEvent(name: name, parameters: parameters);
   }
 }
 
