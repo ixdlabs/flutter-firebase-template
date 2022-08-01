@@ -19,6 +19,7 @@ fvm flutter run
 2. Firestore https://firebase.flutter.dev/docs/firestore/usage
 3. Crashlytics https://firebase.flutter.dev/docs/crashlytics/usage
 4. Cloud Messaging https://firebase.flutter.dev/docs/messaging/usage
+5. Remote Config https://firebase.flutter.dev/docs/remote-config/overview
 
 ### Flutter setup
 
@@ -34,6 +35,8 @@ fvm flutter run
 8. Send a self notification to make sure local notifications integration works.
 9. Send a test notification via the dashboard (The FCM registration token will be logged in to the console) and check if
    it arrives (Both when app is in foreground/background). Tapping it should show a success message.
+10. Set and publish `minimumAppVersion` in Remote Config to 2.0.0 (higher than current), now when you open the app, there should be a message saying
+   that you need to update the app.
 
 ### Firebase Local Setup/Use Emulators
 

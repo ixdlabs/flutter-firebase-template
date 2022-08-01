@@ -12,7 +12,6 @@ import 'package:flutter_firebase_template/logger/logger.dart';
 import 'package:flutter_firebase_template/logger/observers.dart';
 import 'package:flutter_firebase_template/providers/fcm_provider.dart';
 import 'package:flutter_firebase_template/providers/fcm_token_provider.dart';
-import 'package:flutter_firebase_template/providers/force_update_provider.dart';
 import 'package:flutter_firebase_template/providers/navigator_key_provider.dart';
 import 'package:flutter_firebase_template/router/router.gr.dart';
 import 'package:flutter_firebase_template/theme.dart';
@@ -42,7 +41,8 @@ void main() async {
   // Remote Config
   await FirebaseRemoteConfig.instance.setConfigSettings(RemoteConfigSettings(
     fetchTimeout: const Duration(minutes: 1),
-    minimumFetchInterval: const Duration(hours: 1),
+    // Set cache expiration to one hour in production.
+    minimumFetchInterval: const Duration(minutes: kReleaseMode ? 60 : 1),
   ));
   Log.i("Remote Config initialized.");
   // Crashlytics
@@ -88,18 +88,6 @@ class MainApp extends HookConsumerWidget {
     useEffect(() => fcmService.listenToMessages(), [fcmService]);
     useEffect(() => fcmTokenService?.tokenSync(), [fcmTokenService]);
 
-    // Show the force update dialog if the app is updated.
-    final forceUpdate = ref.watch(forceUpdateProvider);
-    useEffect(() {
-      if (forceUpdate.valueOrNull ?? false) {
-        Log.w("Force update requested.");
-        final context = navigatorKey.currentContext;
-        if (context == null) return;
-        showForceUpdateDialog(context);
-      }
-      return null;
-    }, [forceUpdate, navigatorKey]);
-
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       routerDelegate: appRouter.delegate(
@@ -107,24 +95,6 @@ class MainApp extends HookConsumerWidget {
       ),
       routeInformationParser: appRouter.defaultRouteParser(),
       theme: MainAppTheme().build(),
-    );
-  }
-
-  void showForceUpdateDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text("Force update"),
-        content: const Text("A new version of the app is available."),
-        actions: [
-          TextButton(
-            child: const Text("Update"),
-            onPressed: () {
-              Log.i("Redirecting to app store.");
-            },
-          ),
-        ],
-      ),
     );
   }
 }
