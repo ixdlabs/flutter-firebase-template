@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_firebase_template/logger/logger.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -36,4 +37,11 @@ class MainAppNavigationObserver extends AutoRouterObserver {
   void didPush(Route route, Route? previousRoute) {
     Log.d("Pushed Route ${route.settings.name}");
   }
+}
+
+/// A observer that publishes route events to [FirebaseAnalytics].
+class FirebaseAnalyticsNavigationObserver extends FirebaseAnalyticsObserver
+    implements NavigatorObserver {
+  FirebaseAnalyticsNavigationObserver()
+      : super(analytics: FirebaseAnalytics.instance);
 }
