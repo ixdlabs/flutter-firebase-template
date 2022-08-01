@@ -29,6 +29,13 @@ void main() {
     expect("2.0".hasHigherVersionThan("1.0.0"), true);
     expect("3".hasHigherVersionThan("2.10.4"), true);
 
+    // Test version when one side/both sides missing (Compares with 0.0.0)
+    expect("".hasHigherVersionThan("1.1.1"), false);
+    expect("".hasHigherVersionThan("1.1"), false);
+    expect("1.1.1".hasHigherVersionThan(""), true);
+    expect("1.1".hasHigherVersionThan(""), true);
+    expect("".hasHigherVersionThan(""), false);
+
     // Test version when there is a invalid string (take string parts as 0)
     expect("ABC".hasHigherVersionThan("0.9.0"), false);
     expect("1.0.0".hasHigherVersionThan("ABC"), true);

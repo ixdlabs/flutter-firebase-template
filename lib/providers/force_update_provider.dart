@@ -14,4 +14,4 @@ final forceUpdateProvider = FutureProvider((ref) async {
       remoteConfig.getString(RemoteConfigKeys.minimumAppVersion);
 
   return minimumAppVersion.hasHigherVersionThan(currentVersion);
-});
+}, name: "force_update_provider");

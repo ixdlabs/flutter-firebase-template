@@ -6,7 +6,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 /// An observer for [ProviderScope] that logs events happening for providers.
 class MainAppProviderObserver extends ProviderObserver {
   String getName(ProviderBase provider) {
-    return provider.name ?? provider.runtimeType.toString();
+    if (provider.name != null) return provider.name!;
+    Log.w("Provider name not provided. Provider: $provider");
+    return provider.runtimeType.toString();
   }
 
   @override
