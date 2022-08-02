@@ -42,11 +42,13 @@ fvm flutter run
 5. Install [`flutterfire`](https://firebase.flutter.dev/docs/overview/#using-the-flutterfire-cli). (Tested with version `0.2.4`)
 6. Use `flutterfire configure` to configure the project. (Run this again if you change the application id/add new
    services)
-7. Crash app using top right button and use dashboard to make sure crashlytics integration works.
-8. Send a self notification to make sure local notifications integration works.
-9. Send a test notification via the dashboard (The FCM registration token will be logged in to the console) and check if
-   it arrives (Both when app is in foreground/background). Tapping it should show a success message.
-10. Set and publish `minimumAppVersion` in Remote Config to 2.0.0 (higher than current), now when you open the app, there should be a message saying
+7. Change `main.dart` file `firebase_options_example.dart` import to generated `firebase_options.dart` file. 
+8. Run the app.
+9. Crash app using top right button and use dashboard to make sure crashlytics integration works.
+10. Send a self notification to make sure local notifications integration works. 
+11. Send a test notification via the dashboard (The FCM registration token will be logged in to the console) and check if
+   it arrives (Both when app is in foreground/background). Tapping it should show a success message. 
+12. Set and publish `minimumAppVersion` in Remote Config to 2.0.0 (higher than current), now when you open the app, there should be a message saying
    that you need to update the app.
 
 ### Firebase Local Setup/Use Emulators
