@@ -20,7 +20,7 @@ void main() {
     Log.initialize();
   });
 
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+  testWidgets('Navigate to home page test', (WidgetTester tester) async {
     final firebaseAuth = MockFirebaseAuth();
     await firebaseAuth.signInWithEmailAndPassword(
         email: "email@example.com", password: "password");
