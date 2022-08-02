@@ -36,7 +36,7 @@ class MainApp extends HookConsumerWidget {
     // they may not get initialized if there are no listeners.
     final fcmService = ref.watch(fcmServiceProvider);
     final fcmTokenService = ref.watch(fcmTokenServiceProvider);
-    useEffect(() => fcmService.listenToMessages(), [fcmService]);
+    useEffect(() => fcmService?.listenToMessages(), [fcmService]);
     useEffect(() => fcmTokenService?.tokenSync(), [fcmTokenService]);
 
     final firebaseAnalytics = ref.watch(firebaseAnalyticsProvider);

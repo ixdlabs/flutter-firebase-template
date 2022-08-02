@@ -6,9 +6,15 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final fcmTokenServiceProvider = Provider<FcmTokenService?>((ref) {
   final firebaseFirestore = ref.watch(firebaseFirestoreProvider);
+  final firebaseMessaging = ref.watch(firebaseMessagingProvider);
+  if (firebaseMessaging == null) return null;
+
   final currentUser = ref.watch(authCurrentUserProvider);
   if (currentUser == null) return null;
 
   return FirestoreFcmTokenService(
-      currentUser: currentUser, firebaseFirestore: firebaseFirestore);
+    currentUser: currentUser,
+    firebaseFirestore: firebaseFirestore,
+    firebaseMessaging: firebaseMessaging,
+  );
 }, name: "fcm_token_service_provider");

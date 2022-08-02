@@ -10,6 +10,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class FirebaseFcmService extends FcmService {
   final StateController<bool> fcmInitialMessageHandled;
+  final FirebaseMessaging firebaseMessaging;
+  final Stream<RemoteMessage> onMessageStream;
+  final Stream<RemoteMessage> onMessageOpenedAppStream;
 
   final _localChannel = const AndroidNotificationChannel(
       'high_importance_channel', 'High Importance Notifications',
@@ -20,7 +23,12 @@ class FirebaseFcmService extends FcmService {
   StreamSubscription? _fcmOnMessageOpenedAppSubscription;
   StreamSubscription? _fcmOnMessageSubscription;
 
-  FirebaseFcmService(this.fcmInitialMessageHandled);
+  FirebaseFcmService({
+    required this.fcmInitialMessageHandled,
+    required this.firebaseMessaging,
+    required this.onMessageStream,
+    required this.onMessageOpenedAppStream,
+  });
 
   @override
   void startListeningToMessages() {
@@ -28,7 +36,7 @@ class FirebaseFcmService extends FcmService {
         "Subscription already exists");
 
     _fcmOnMessageOpenedAppSubscription =
-        FirebaseMessaging.onMessageOpenedApp.listen((message) {
+        onMessageOpenedAppStream.listen((message) {
       Log.i("FCM message opened app: $message");
       _fcmEventStreamController.add(FcmEvent(message.data));
     });
@@ -78,7 +86,7 @@ class FirebaseFcmService extends FcmService {
   void _connectFcmToLocalNotifications() {
     assert(_fcmOnMessageSubscription == null, "Subscription already exists");
 
-    _fcmOnMessageSubscription = FirebaseMessaging.onMessage.listen((message) {
+    _fcmOnMessageSubscription = onMessageStream.listen((message) {
       Log.i("FCM message received: $message");
       final notification = message.notification;
 
@@ -105,7 +113,7 @@ class FirebaseFcmService extends FcmService {
   void _handleInitialMessage() async {
     if (fcmInitialMessageHandled.state) return;
     Log.d("Handling initial FCM message.");
-    final initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+    final initialMessage = await firebaseMessaging.getInitialMessage();
     if (initialMessage != null) {
       _fcmEventStreamController.add(FcmEvent(initialMessage.data));
     }

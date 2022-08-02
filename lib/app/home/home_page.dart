@@ -21,7 +21,7 @@ class HomePage extends HookConsumerWidget {
     // Following will attach a listener to the FCM service.
     // When a message is received, the listener will call this closure.
     useEffect(() {
-      return ref.read(fcmServiceProvider).subscribe((event) {
+      return ref.read(fcmServiceProvider)?.subscribe((event) {
         Log.i("FCM event: $event");
         context.messenger.showSuccess("FCM event: $event");
       });
@@ -52,7 +52,7 @@ class HomePage extends HookConsumerWidget {
             ElevatedButton(
               child: const Text("Send myself a Notification"),
               onPressed: () {
-                ref.read(fcmServiceProvider).showLocalNotification(
+                ref.read(fcmServiceProvider)?.showLocalNotification(
                   0,
                   title: "Hello World",
                   body: "This is a test notification",

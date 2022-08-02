@@ -5,10 +5,11 @@ import 'package:flutter_firebase_template/utils/version_utils.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
-final forceUpdateProvider = FutureProvider((ref) async {
+final forceUpdateProvider = FutureProvider<bool>((ref) async {
   try {
     if (!kReleaseMode) return false;
     final remoteConfig = ref.watch(remoteConfigProvider);
+    if (remoteConfig == null) return false;
 
     final packageInfo = await PackageInfo.fromPlatform();
     final currentVersion = packageInfo.version;

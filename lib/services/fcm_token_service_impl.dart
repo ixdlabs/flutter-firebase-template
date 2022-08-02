@@ -10,21 +10,23 @@ import 'package:flutter_firebase_template/services/firestore_service.dart';
 
 class FirestoreFcmTokenService extends FirestoreService<FcmToken>
     with FcmTokenService {
+  final FirebaseMessaging firebaseMessaging;
   final User currentUser;
   StreamSubscription? _fcmOnTokenRefreshSubscription;
 
   FirestoreFcmTokenService({
     required this.currentUser,
     required super.firebaseFirestore,
+    required this.firebaseMessaging,
   });
 
   @override
   void startTokenSync() {
     // Store FCM token on firestore.
     // The first token as well as updates are stored in the same collection.
-    FirebaseMessaging.instance.getToken().then(storeToken);
+    firebaseMessaging.getToken().then(storeToken);
     _fcmOnTokenRefreshSubscription =
-        FirebaseMessaging.instance.onTokenRefresh.listen(storeToken);
+        firebaseMessaging.onTokenRefresh.listen(storeToken);
   }
 
   @override

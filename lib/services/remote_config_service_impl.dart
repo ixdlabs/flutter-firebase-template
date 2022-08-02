@@ -3,13 +3,15 @@ import 'package:flutter_firebase_template/constants.dart';
 import 'package:flutter_firebase_template/services/remote_config_service.dart';
 
 class FirebaseRemoteConfigService implements RemoteConfigService {
-  final _remoteConfig = FirebaseRemoteConfig.instance;
+  final FirebaseRemoteConfig firebaseRemoteConfig;
+
+  FirebaseRemoteConfigService({required this.firebaseRemoteConfig});
 
   @override
   Future<String> get minimumAppVersion async {
     // We can use a separate service to get the minimum app version.
-    await _remoteConfig.fetchAndActivate();
-    return _remoteConfig.getString(RemoteConfigKeys.minimumAppVersion);
+    await firebaseRemoteConfig.fetchAndActivate();
+    return firebaseRemoteConfig.getString(RemoteConfigKeys.minimumAppVersion);
   }
 
   @override
