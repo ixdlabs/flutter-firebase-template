@@ -7,6 +7,7 @@ import 'package:flutter_firebase_template/providers/fcm_provider.dart';
 import 'package:flutter_firebase_template/router/router.gr.dart';
 import 'package:flutter_firebase_template/utils/messenger_utils.dart';
 import 'package:flutter_firebase_template/widgets/default_scaffold.dart';
+import 'package:flutter_firebase_template/widgets/error_widget.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -86,8 +87,8 @@ class CountWidget extends ConsumerWidget {
                 style: Theme.of(context).textTheme.subtitle1),
         ],
       ),
-      error: (error, st) =>
-          Text("Error: $error", style: Theme.of(context).textTheme.headline4),
+      error: (error, st) => ErrorMessageWidget(
+          message: "Error loading my count", exception: error),
       loading: () =>
           Text("Loading...", style: Theme.of(context).textTheme.headline4),
     );

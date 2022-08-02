@@ -14,7 +14,7 @@ extension SnapshotUtils<T> on AsyncSnapshot<T> {
   }) {
     if (hasError) {
       return onError == null
-          ? ErrorMessageWidget(error: error)
+          ? ErrorMessageWidget(exception: error)
           : onError(error);
     } else if (connectionState != ConnectionState.waiting && hasData) {
       return onData(data as T);
