@@ -17,7 +17,7 @@ import 'test_utils/mocked_provider_scope.dart';
 
 void main() {
   setUp(() {
-    Log.initialize();
+    Log.initialize(silent: true);
   });
 
   testWidgets('Navigate to home page test', (WidgetTester tester) async {

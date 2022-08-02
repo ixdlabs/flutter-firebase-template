@@ -7,19 +7,23 @@ import 'package:logger/logger.dart';
 /// Errors logs will be sent to crashlytics.
 class Log {
   static late final Log _instance;
-  final Logger logger;
+  final Logger? logger;
   FirebaseCrashlytics? firebaseCrashlytics;
   FirebaseAnalytics? firebaseAnalytics;
 
-  Log._({required this.logger});
+  Log._({this.logger});
 
   /// Initialize the logger.
   /// This method must be called before any other method.
-  static Future<void> initialize() async {
+  static Future<void> initialize({bool silent = false}) async {
     // Don't log anything below warnings in production.
     if (kReleaseMode) Logger.level = Level.warning;
-    final logger = Logger(printer: _MainAppLogPrinter());
-    _instance = Log._(logger: logger);
+    if (silent) {
+      _instance = Log._();
+    } else {
+      final logger = Logger(printer: _MainAppLogPrinter());
+      _instance = Log._(logger: logger);
+    }
   }
 
   /// Set the firebase services to use.
@@ -33,40 +37,40 @@ class Log {
 
   /// Logs a message at the [Level.verbose] level.
   static void v(dynamic message, [dynamic error, StackTrace? stackTrace]) {
-    _instance.logger.v(message, error, stackTrace);
+    _instance.logger?.v(message, error, stackTrace);
   }
 
   /// Logs a message at the [Level.debug] level.
   static void d(dynamic message, [dynamic error, StackTrace? stackTrace]) {
-    _instance.logger.d(message, error, stackTrace);
+    _instance.logger?.d(message, error, stackTrace);
   }
 
   /// Logs a message at the [Level.info] level.
   static void i(dynamic message, [dynamic error, StackTrace? stackTrace]) {
-    _instance.logger.i(message, error, stackTrace);
+    _instance.logger?.i(message, error, stackTrace);
   }
 
   /// Logs a message at the [Level.warning] level.
   static void w(dynamic message, [dynamic error, StackTrace? stackTrace]) {
-    _instance.logger.w(message, error, stackTrace);
+    _instance.logger?.w(message, error, stackTrace);
   }
 
   /// Logs a message at the [Level.error] level.
   static void e(dynamic message,
       [dynamic error, StackTrace? stackTrace]) async {
-    _instance.logger.e(message, error, stackTrace);
+    _instance.logger?.e(message, error, stackTrace);
     await _instance.firebaseCrashlytics
         ?.recordError(error, stackTrace, reason: message);
   }
 
   /// Logs a message at the [Level.wtf] level.
   static void wtf(dynamic message, [dynamic error, StackTrace? stackTrace]) {
-    _instance.logger.wtf(message, error, stackTrace);
+    _instance.logger?.wtf(message, error, stackTrace);
   }
 
   /// Logs a analytics event.
   static void a(String name, [Map<String, Object?>? parameters]) async {
-    _instance.logger.i("Analytics [$name] Parameters:  $parameters");
+    _instance.logger?.i("Analytics [$name] Parameters:  $parameters");
     await _instance.firebaseAnalytics
         ?.logEvent(name: name, parameters: parameters);
   }
