@@ -1,7 +1,9 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_template/logger/observers.dart';
 import 'package:flutter_firebase_template/providers/fcm_provider.dart';
 import 'package:flutter_firebase_template/providers/fcm_token_provider.dart';
+import 'package:flutter_firebase_template/providers/firebase_provider.dart';
 import 'package:flutter_firebase_template/providers/navigator_key_provider.dart';
 import 'package:flutter_firebase_template/router/router.gr.dart';
 import 'package:flutter_firebase_template/theme.dart';
@@ -37,12 +39,15 @@ class MainApp extends HookConsumerWidget {
     useEffect(() => fcmService.listenToMessages(), [fcmService]);
     useEffect(() => fcmTokenService?.tokenSync(), [fcmTokenService]);
 
+    final firebaseAnalytics = ref.watch(firebaseAnalyticsProvider);
+
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       routerDelegate: appRouter.delegate(
         navigatorObservers: () => [
           MainAppNavigationObserver(),
-          FirebaseAnalyticsNavigationObserver(),
+          if (firebaseAnalytics != null)
+            FirebaseAnalyticsObserver(analytics: firebaseAnalytics),
         ],
       ),
       routeInformationParser: appRouter.defaultRouteParser(),

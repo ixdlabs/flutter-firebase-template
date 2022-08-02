@@ -1,9 +1,9 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_template/logger/logger.dart';
 import 'package:flutter_firebase_template/providers/count_provider.dart';
 import 'package:flutter_firebase_template/providers/fcm_provider.dart';
+import 'package:flutter_firebase_template/providers/firebase_provider.dart';
 import 'package:flutter_firebase_template/router/router.gr.dart';
 import 'package:flutter_firebase_template/utils/messenger_utils.dart';
 import 'package:flutter_firebase_template/widgets/default_scaffold.dart';
@@ -16,6 +16,8 @@ class HomePage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final firebaseCrashlytics = ref.watch(firebaseCrashlyticsProvider);
+
     // Following will attach a listener to the FCM service.
     // When a message is received, the listener will call this closure.
     useEffect(() {
@@ -31,7 +33,7 @@ class HomePage extends HookConsumerWidget {
         actions: [
           IconButton(
             tooltip: "Crash Me",
-            onPressed: () => FirebaseCrashlytics.instance.crash(),
+            onPressed: () => firebaseCrashlytics?.crash(),
             icon: const Icon(Icons.error),
           ),
         ],

@@ -12,10 +12,14 @@ typedef DocDataUpdate = Map<String, dynamic>? Function(
     Map<String, dynamic>? currentData);
 
 abstract class FirestoreService<T> {
+  FirebaseFirestore firebaseFirestore;
+
   String get collectionName;
 
+  FirestoreService({required this.firebaseFirestore});
+
   CollectionReference<Map<String, dynamic>> get collectionRef =>
-      FirebaseFirestore.instance.collection(collectionName);
+      firebaseFirestore.collection(collectionName);
 
   /// Returns a stream of a collection in firestore.
   /// The stream will emit for each document in the collection.

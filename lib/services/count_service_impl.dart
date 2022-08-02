@@ -5,10 +5,13 @@ import 'package:flutter_firebase_template/models/count.dart';
 import 'package:flutter_firebase_template/services/count_service.dart';
 import 'package:flutter_firebase_template/services/firestore_service.dart';
 
-class FirestoreCountService extends CountService with FirestoreService<Count> {
+class FirestoreCountService extends FirestoreService<Count> with CountService {
   final User currentUser;
 
-  FirestoreCountService({required this.currentUser});
+  FirestoreCountService({
+    required this.currentUser,
+    required super.firebaseFirestore,
+  });
 
   @override
   Stream<Count?> getMyCount() {

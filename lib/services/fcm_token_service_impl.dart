@@ -8,12 +8,15 @@ import 'package:flutter_firebase_template/models/fcm_token.dart';
 import 'package:flutter_firebase_template/services/fcm_token_service.dart';
 import 'package:flutter_firebase_template/services/firestore_service.dart';
 
-class FirestoreFcmTokenService extends FcmTokenService
-    with FirestoreService<FcmToken> {
+class FirestoreFcmTokenService extends FirestoreService<FcmToken>
+    with FcmTokenService {
   final User currentUser;
   StreamSubscription? _fcmOnTokenRefreshSubscription;
 
-  FirestoreFcmTokenService({required this.currentUser});
+  FirestoreFcmTokenService({
+    required this.currentUser,
+    required super.firebaseFirestore,
+  });
 
   @override
   void startTokenSync() {
