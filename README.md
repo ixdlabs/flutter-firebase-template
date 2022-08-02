@@ -1,5 +1,15 @@
 # Flutter Project
 
+## Out-of-the-box features/tools
+
+- Router integration and simple page setup boilerplate
+- Login/Register/Profile pages with Firebase Authentication
+- Check for app updates to force update (using Firebase Remote Config)
+- Logger that make logging easier and sends error logs to Firebase Crashlytics
+- Firestore configuration and model/services structuring with helper methods
+- FCM notifications with Firebase Messaging and Local Notifications integration that enables foreground and background notifications
+- Sync FCM token with Firestore for the logged in users
+
 ## Running Project
 
 It is recommended to use `fvm` to run the project. You can install `fvm` by following the
@@ -20,6 +30,7 @@ fvm flutter run
 3. Crashlytics https://firebase.flutter.dev/docs/crashlytics/usage
 4. Cloud Messaging https://firebase.flutter.dev/docs/messaging/usage
 5. Remote Config https://firebase.flutter.dev/docs/remote-config/overview
+6. Analytics https://firebase.flutter.dev/docs/analytics/overview
 
 ### Flutter setup
 
