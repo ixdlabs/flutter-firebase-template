@@ -9,7 +9,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_template/app.dart';
 import 'package:flutter_firebase_template/constants.dart';
-import 'package:flutter_firebase_template/firebase_options_example.dart';
+import 'package:flutter_firebase_template/firebase_options.dart';
 import 'package:flutter_firebase_template/logger/logger.dart';
 
 void main() async {

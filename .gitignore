@@ -49,7 +49,6 @@ app.*.map.json
 .fvm/flutter_sdk
 
 # Remove following after configuring firebase
-firebase_options.dart
 firebase_app_id_file.json
 GoogleService-Info.plist
 google-services.json

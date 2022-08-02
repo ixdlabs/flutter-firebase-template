@@ -32,24 +32,19 @@ fvm flutter run
 5. Remote Config https://firebase.flutter.dev/docs/remote-config/overview
 6. Analytics https://firebase.flutter.dev/docs/analytics/overview
 
-### Flutter setup
+### Project setup
 
-1. Enable firebase services.
-2. Change application id in `android/app/build.gradle` to your application id. (
-   Default `com.example.flutter_firebase_template`)
-3. In iOS, change the bundle id to your application id. (Default `com.example.flutterFirebaseTemplate`)
-4. Remove firebase files from `.gitignore`.
-5. Install [`flutterfire`](https://firebase.flutter.dev/docs/overview/#using-the-flutterfire-cli). (Tested with version `0.2.4`)
-6. Use `flutterfire configure` to configure the project. (Run this again if you change the application id/add new
-   services)
-7. Change `main.dart` file `firebase_options_example.dart` import to generated `firebase_options.dart` file. 
-8. Run the app.
-9. Crash app using top right button and use dashboard to make sure crashlytics integration works.
-10. Send a self notification to make sure local notifications integration works. 
-11. Send a test notification via the dashboard (The FCM registration token will be logged in to the console) and check if
+1. Create a firebase project. No need to add any apps yet.
+2. Install [`flutterfire`](https://firebase.flutter.dev/docs/overview/#using-the-flutterfire-cli). (Tested with version `0.2.4`)
+3. Use `flutterfire configure` to configure the project and add android/iOS apps. (Run this again if you change the application id/add new services)
+4. Run `configure.py` script using `python configure.py`. You may need to install python. Delete the `configure.py` file after running the script. 
+5. Run `fvm flutter pub get` to install all the dependencies. 
+6. Run the app. 
+7. Crash app using top right button and use dashboard to make sure crashlytics integration works. 
+8. Send a self notification to make sure local notifications integration works. 
+9. Send a test notification via the dashboard (The FCM registration token will be logged in to the console) and check if
    it arrives (Both when app is in foreground/background). Tapping it should show a success message. 
-12. Set and publish `minimumAppVersion` in Remote Config to 2.0.0 (higher than current), now when you open the app, there should be a message saying
-   that you need to update the app.
+10. Set and publish `minimumAppVersion` in Remote Config to 2.0.0 (higher than current), now when you open the app, there should be a message saying that you need to update the app.
 
 ### Firebase Local Setup/Use Emulators
 
@@ -123,5 +118,4 @@ Note: If the logs are crowded with unnecessary logs, apply following filter (VS 
 
 - [ ] Local Notifications Release
   Config (https://pub.dev/packages/flutter_local_notifications#release-build-configuration)
-- [ ] Guide on replacing texts and creating new project
 - [ ] iOS Configurations
