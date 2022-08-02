@@ -5,6 +5,8 @@ import 'package:flutter_firebase_template/utils/version_utils.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
+/// A service provider that provides whether the app requires
+/// a forced update or not.
 final forceUpdateProvider = FutureProvider<bool>((ref) async {
   try {
     if (!kReleaseMode) return false;

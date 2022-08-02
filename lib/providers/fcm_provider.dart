@@ -3,9 +3,12 @@ import 'package:flutter_firebase_template/services/fcm_service.dart';
 import 'package:flutter_firebase_template/services/fcm_service_impl.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+/// A global state that holds whether the app handled initial FCM tap.
+/// This is used to prevent the app from handling the FCM tap several times.
 final fcmInitialMessageHandledProvider = StateProvider<bool>((ref) => false,
     name: "fcm_initial_message_handled_provider");
 
+/// FCM service provider.
 final fcmServiceProvider = Provider<FcmService?>((ref) {
   final firebaseMessaging = ref.watch(firebaseMessagingProvider);
   final firebaseMessagingOnMessage =

@@ -4,6 +4,7 @@ import 'package:flutter_firebase_template/services/fcm_token_service.dart';
 import 'package:flutter_firebase_template/services/fcm_token_service_impl.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+/// Service provider that syncs FCM token with firebase.
 final fcmTokenServiceProvider = Provider<FcmTokenService?>((ref) {
   final firebaseFirestore = ref.watch(firebaseFirestoreProvider);
   final firebaseMessaging = ref.watch(firebaseMessagingProvider);
