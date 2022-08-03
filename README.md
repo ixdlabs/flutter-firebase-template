@@ -37,7 +37,7 @@ fvm flutter run
 1. Create a firebase project. No need to add any apps yet.
 2. Install [`flutterfire`](https://firebase.flutter.dev/docs/overview/#using-the-flutterfire-cli). (Tested with version `0.2.4`)
 3. Use `flutterfire configure` to configure the project and add android/iOS apps. (Run this again if you change the application id/add new services)
-4. Run `configure.py` script using `python configure.py`. You may need to install python. Delete the `configure.py` file after running the script. 
+4. Run `configure.py` script using `python configure.py`. You may need to install python. Delete the `configure.py` file after running the script.  If something goes wrong  while running the script, reset the project using `git reset --hard` and try again.
 5. Run `fvm flutter pub get` to install all the dependencies. 
 6. Run the app. 
 7. Crash app using top right button and use dashboard to make sure crashlytics integration works. 
@@ -45,6 +45,8 @@ fvm flutter run
 9. Send a test notification via the dashboard (The FCM registration token will be logged in to the console) and check if
    it arrives (Both when app is in foreground/background). Tapping it should show a success message. 
 10. Set and publish `minimumAppVersion` in Remote Config to 2.0.0 (higher than current), now when you open the app, there should be a message saying that you need to update the app.
+
+Note: To rename the intellij project properly, use intellij refactoring.
 
 ### Firebase Local Setup/Use Emulators
 

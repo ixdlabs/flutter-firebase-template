@@ -14,7 +14,8 @@ def replace_text(file_path, original, replacement):
         f.write(file_data.replace(original, replacement))
 
 
-def move_file(file_path, new_path):
+def move_file_and_delete_directory(file_path, new_path):
+    Path(new_path).parent.mkdir(parents=True, exist_ok=True)
     os.rename(Path(file_path), Path(new_path))
 
 
@@ -42,7 +43,7 @@ def recursively_replace_text(directory, original, replacement):
 
 class FlutterFirebaseTemplate:
     def __init__(self, flutter_package_name):
-        self.android_application_name = None
+        self.android_application_id = None
         self.ios_bundle_name = None
         self.app_display_name = None
         self.flutter_package_name = flutter_package_name
@@ -61,7 +62,7 @@ class FlutterFirebaseTemplate:
                 print(f"{file} is missing")
                 print("Please configure firebase in your project using 'flutterfire configure'")
                 print("https://firebase.flutter.dev/docs/overview/#using-the-flutterfire-cli")
-                print("Please note that you may neeed touse atleast flutterfire 0.2.4")
+                print("Please note that you may neeed to use atleast flutterfire 0.2.4")
                 raise Exception("Missing firebase configuration")
 
         print("Extracting android application id from google-services.json")
@@ -92,15 +93,15 @@ class FlutterFirebaseTemplate:
             "android/app/src/profile/AndroidManifest.xml",
             "android/app/src/main/kotlin/com/example/flutter_firebase_template/MainActivity.kt",
         ]:
-            replace_text(file, "com.example.flutter_firebase_template", self.android_application_name)
+            replace_text(file, "com.example.flutter_firebase_template", self.android_application_id)
         replace_text(
             "android/app/src/main/AndroidManifest.xml",
             "flutter_firebase_template",
-            self.android_application_name.split(".")[-1],
+            self.android_application_id.split(".")[-1],
         )
-        move_file(
+        move_file_and_delete_directory(
             "android/app/src/main/kotlin/com/example/flutter_firebase_template/MainActivity.kt",
-            f"android/app/src/main/kotlin/{self.android_application_name.replace('.', '/')}/MainActivity.kt",
+            f"android/app/src/main/kotlin/{self.android_application_id.replace('.', '/')}/MainActivity.kt",
         )
 
         # iOS
@@ -119,7 +120,7 @@ class FlutterFirebaseTemplate:
         replace_text(
             "ios/Runner/Info.plist",
             "flutter_firebase_template",
-            self.android_application_name.split(".")[-1],
+            self.flutter_package_name,
         )
 
         # Flutter
@@ -142,8 +143,8 @@ class FlutterFirebaseTemplate:
         )
 
         # Fix gitignore
-        print("Fixing gitignore")
-        with open("gitignore", "r") as f:
+        print("Fixing .gitignore")
+        with open(".gitignore", "r") as f:
             gitignore = f.read()
             for remove_line in [
                 "# Remove following after configuring firebase",
@@ -153,7 +154,7 @@ class FlutterFirebaseTemplate:
             ]:
                 for line in gitignore.split("\n"):
                     if line.startswith(remove_line):
-                        delete_lines_containing("gitignore", line)
+                        delete_lines_containing(".gitignore", line)
 
 
 # Main ===============================================================================================
