@@ -5,10 +5,13 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_firebase_template/logger/logger.dart';
 import 'package:flutter_firebase_template/services/fcm_service.dart';
+import 'package:flutter_firebase_template/widgets/notification_dialog.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class FirebaseFcmService extends FcmService {
+  final NotificationDialog notificationDialog;
+
   final StateController<bool> fcmInitialMessageHandled;
   final FirebaseMessaging firebaseMessaging;
   final Stream<RemoteMessage> onMessageStream;
@@ -24,6 +27,7 @@ class FirebaseFcmService extends FcmService {
   StreamSubscription? _fcmOnMessageSubscription;
 
   FirebaseFcmService({
+    required this.notificationDialog,
     required this.fcmInitialMessageHandled,
     required this.firebaseMessaging,
     required this.onMessageStream,
@@ -50,12 +54,13 @@ class FirebaseFcmService extends FcmService {
         .resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(_localChannel);
-    const initializationSettings = InitializationSettings(
-      android: AndroidInitializationSettings("@mipmap/ic_launcher"),
+    final initializationSettings = InitializationSettings(
+      android: const AndroidInitializationSettings("@mipmap/ic_launcher"),
       iOS: IOSInitializationSettings(
         requestSoundPermission: true,
         requestBadgePermission: true,
         requestAlertPermission: true,
+        onDidReceiveLocalNotification: _iOSShowNotificationWhileOnForeground,
       ),
     );
     await _localNotificationPlugin.initialize(initializationSettings,
@@ -98,6 +103,22 @@ class FirebaseFcmService extends FcmService {
         );
       }
     });
+  }
+
+  void _iOSShowNotificationWhileOnForeground(
+      int id, String? title, String? body, String? payload) async {
+    Log.i("onDidReceiveLocalNotification: $payload");
+    notificationDialog.showLocalNotification(
+      title: title,
+      body: body,
+      onTap: () {
+        if (payload == null) return;
+        final jsonPayload = json.decode(payload);
+        if (jsonPayload is Map<String, dynamic>) {
+          _fcmEventStreamController.add(FcmEvent(jsonPayload));
+        }
+      },
+    );
   }
 
   @override

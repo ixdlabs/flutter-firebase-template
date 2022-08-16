@@ -1,6 +1,8 @@
 import 'package:flutter_firebase_template/providers/firebase_provider.dart';
+import 'package:flutter_firebase_template/providers/navigator_key_provider.dart';
 import 'package:flutter_firebase_template/services/fcm_service.dart';
 import 'package:flutter_firebase_template/services/fcm_service_impl.dart';
+import 'package:flutter_firebase_template/widgets/notification_dialog.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 /// A global state that holds whether the app handled initial FCM tap.
@@ -10,6 +12,7 @@ final fcmInitialMessageHandledProvider = StateProvider<bool>((ref) => false,
 
 /// FCM service provider.
 final fcmServiceProvider = Provider<FcmService?>((ref) {
+  final navigatorKey = ref.watch(navigatorKeyProvider);
   final firebaseMessaging = ref.watch(firebaseMessagingProvider);
   final firebaseMessagingOnMessage =
       ref.watch(firebaseMessagingOnMessageProvider);
@@ -25,6 +28,7 @@ final fcmServiceProvider = Provider<FcmService?>((ref) {
       ref.watch(fcmInitialMessageHandledProvider.notifier);
 
   return FirebaseFcmService(
+    notificationDialog: IosNotificationDialog(navigatorKey: navigatorKey),
     fcmInitialMessageHandled: fcmInitialMessageHandled,
     firebaseMessaging: firebaseMessaging,
     onMessageStream: firebaseMessagingOnMessage,
