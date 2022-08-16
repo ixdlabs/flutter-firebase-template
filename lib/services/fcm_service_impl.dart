@@ -45,7 +45,6 @@ class FirebaseFcmService extends FcmService {
 
   /// Initialize Local Notifications.
   /// Make sure to handle the notification if the app was opened by a push notification.
-  /// TODO: https://pub.dev/packages/flutter_local_notifications#release-build-configuration
   Future<void> _initializeLocalNotifications() async {
     _localNotificationPlugin
         .resolvePlatformSpecificImplementation<
